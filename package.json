@@ -1,0 +1,17 @@
+{
+  "name": "fso",
+  "version": "1.0.0",
+  "description": "Backend of FullStackOpen's course (part III)",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "npx nodemon index.js",
+    "test": "curl localhost:9001/api/notes/3",
+    "pretty": "npx prettier --write index.js"
+  },
+  "author": "dj-mc",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.1"
+  }
+}
