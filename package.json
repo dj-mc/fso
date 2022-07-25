@@ -4,10 +4,9 @@
   "description": "Backend of FullStackOpen's course (part III)",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "dev": "npx nodemon index.js",
-    "test": "curl localhost:9001/api/notes/3",
-    "pretty": "npx prettier --write index.js"
+    "dev": "npx nodemon listener.js",
+    "test": "curl localhost:9001/notes/api/3 && curl localhost:9001/phonebook/api/3",
+    "pretty": "npx prettier --write notes-server.js phonebook-server.js"
   },
   "author": "dj-mc",
   "license": "ISC",

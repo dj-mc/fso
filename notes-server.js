@@ -5,21 +5,20 @@ let notes_data = {};
 fs.readFile("./notes.json", "utf8", (err, data) => {
   if (err) throw err;
   notes_data = JSON.parse(data).notes;
-  console.log(notes_data);
 });
 
 const app = express();
 app.use(express.json());
 
 app.get("/", (req, res) => {
-  res.send(`<h1>Hello</h1>`);
+  res.send(`<h1>Notes Homepage</h1>`);
 });
 
-app.get("/api/notes", (req, res) => {
+app.get("/api", (req, res) => {
   res.json(notes_data);
 });
 
-app.get("/api/notes/:id", (req, res) => {
+app.get("/api/:id", (req, res) => {
   const target_note_id = Number(req.params.id);
   const target_note = notes_data.find((note) => note.id === target_note_id);
 
@@ -31,7 +30,7 @@ app.get("/api/notes/:id", (req, res) => {
   }
 });
 
-app.delete("/api/notes/:id", (req, res) => {
+app.delete("/api/:id", (req, res) => {
   notes_data = notes_data.filter((note) => note.id !== Number(req.params.id));
   res.status(204).end();
 });
@@ -42,7 +41,7 @@ const generate_id = () => {
     : 0;
 };
 
-app.post("/api/notes", (req, res) => {
+app.post("/api", (req, res) => {
   const req_body = req.body;
   if (!req_body.content) {
     return res.status(400).json({ error: "Content not found" });
@@ -58,5 +57,12 @@ app.post("/api/notes", (req, res) => {
 });
 
 const port = 9001;
-app.listen(port);
-console.log(`Now listening to ${port}`);
+
+function listen() {
+  app.listen(port);
+  console.log(`Now listening to ${port}`);
+}
+
+// listen();
+
+module.exports = { app };
