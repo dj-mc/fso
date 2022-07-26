@@ -10,4 +10,4 @@ app
   .use("/phonebook", require("./phonebook-server").app)
   .listen(9001);
 
-console.log("Listener is serving to localhost:9001");
+console.log("Listener is serving to http://127.0.0.1:9001/");
