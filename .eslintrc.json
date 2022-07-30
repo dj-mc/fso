@@ -1,0 +1,25 @@
+{
+  "env": {
+    "es6": true,
+    "node": true
+  },
+  "parserOptions": {
+    "sourceType": "script",
+    "ecmaVersion": "latest"
+  },
+  "rules": {
+    "no-undef": 2,
+    "no-unused-vars": [2, { "varsIgnorePattern": "_" }],
+    "no-use-before-define": 2,
+    "no-sequences": "off",
+    "no-var": "off",
+    "semi": ["error", "always"],
+    "max-len": [
+      "warn",
+      {
+        "code": 100,
+        "comments": 80
+      }
+    ]
+  }
+}

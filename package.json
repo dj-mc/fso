@@ -5,8 +5,9 @@
   "main": "index.js",
   "scripts": {
     "dev": "npx nodemon listener.js",
-    "test": "curl localhost:9001/notes/api/3 && curl localhost:9001/phonebook/api/3",
-    "pretty": "npx prettier --write notes-server.js phonebook-server.js"
+    "curl": "curl localhost:9001/notes/api/3 && curl localhost:9001/phonebook/api/3",
+    "pretty": "npx prettier --write notes-server.js phonebook-server.js",
+    "lint": "npx eslint ."
   },
   "author": "dj-mc",
   "license": "ISC",

@@ -41,13 +41,11 @@ app.get("/:id", (req, res) => {
   }
 });
 
-const port = 9001;
-
-function listen() {
-  app.listen(port);
-  console.log(`Now listening to ${port}`);
-}
-
+// const port = 9001;
+// function listen() {
+//   app.listen(port);
+//   console.log(`Now listening to ${port}`);
+// }
 // listen();
 
 module.exports = { app };
