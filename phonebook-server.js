@@ -58,7 +58,7 @@ app.delete("/api/:id", (req, res) => {
     phonebook_data = phonebook_data.filter(
       (contact) => contact.id !== target_contact_id
     );
-    overwrite_json_file(phonebook_file_path, phonebook_data);
+    overwrite_json_file(phonebook_file_path, { phonebook: phonebook_data });
     console.log(`Deletion of ${target_contact} successful`);
     res.status(200).end();
   } else {
