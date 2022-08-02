@@ -1,9 +1,9 @@
-const fs = require("fs");
+const fs = require('fs');
 
 const read_utf8_file = (file_path) => {
   return new Promise((resolve, reject) => {
     try {
-      fs.readFile(file_path, "utf8", function read(err, data) {
+      fs.readFile(file_path, 'utf8', function read(err, data) {
         if (err) throw err;
         resolve(data);
       });
@@ -19,7 +19,7 @@ async function parse_json_file(file_path) {
 }
 
 const overwrite_json_file = (file_path, new_json_data) => {
-  fs.writeFile(file_path, JSON.stringify(new_json_data), "utf8", (err) => {
+  fs.writeFile(file_path, JSON.stringify(new_json_data), 'utf8', (err) => {
     if (err) throw err;
     else console.log(`Saved ${new_json_data}!`);
   });
@@ -27,5 +27,5 @@ const overwrite_json_file = (file_path, new_json_data) => {
 
 module.exports = {
   parse_json_file,
-  overwrite_json_file,
+  overwrite_json_file
 };

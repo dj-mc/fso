@@ -1,28 +1,26 @@
-const express = require("express");
-const { parse_json_file, overwrite_json_file } = require("./utilities");
+const express = require('express');
+const { parse_json_file, overwrite_json_file } = require('./utilities');
+const { request_logger, unknown_route } = require('./middleware');
 
 let phonebook_data = [];
-let phonebook_file_path = "./phonebook.json";
+let phonebook_file_path = './phonebook.json';
 parse_json_file(phonebook_file_path).then((result) => {
   phonebook_data = phonebook_data.concat(result.phonebook);
 });
 
-setTimeout(() => {
-  console.log("Got data (async):", phonebook_data);
-}, 25);
-
 const app = express();
 app.use(express.json());
+app.use(request_logger);
 
-app.get("/", (req, res) => {
+app.get('/', (req, res) => {
   res.send(`<h1>Phonebook Homepage</h1>`);
 });
 
-app.get("/api", (req, res) => {
+app.get('/api', (req, res) => {
   res.json(phonebook_data);
 });
 
-app.get("/info", (req, res) => {
+app.get('/info', (req, res) => {
   res.send(
     `You have ${phonebook_data.length} contacts
     </br>
@@ -38,7 +36,7 @@ const get_contact = (target_contact_id) => {
   return target_contact;
 };
 
-app.get("/:id", (req, res) => {
+app.get('/:id', (req, res) => {
   const target_contact_id = Number(req.params.id);
   const target_contact = get_contact(target_contact_id);
 
@@ -50,7 +48,7 @@ app.get("/:id", (req, res) => {
   }
 });
 
-app.delete("/api/:id", (req, res) => {
+app.delete('/api/:id', (req, res) => {
   const target_contact_id = Number(req.params.id);
   const target_contact = get_contact(target_contact_id);
 
@@ -67,12 +65,10 @@ app.delete("/api/:id", (req, res) => {
   }
 });
 
-app.post("/api", (req, res) => {
+app.post('/api', (req, res) => {
   const req_body = req.body;
   if (!req_body.name || !req_body.phone_number) {
-    return res.status(400).json({ error: "Not enough information" });
-  } else {
-    console.log(req_body.name, req_body.phone_number);
+    return res.status(400).json({ error: 'Not enough information' });
   }
 
   // Todo: Handle errors on posting to duplicate name or phone number
@@ -80,12 +76,14 @@ app.post("/api", (req, res) => {
   const new_contact = {
     name: req_body.name,
     phone_number: req_body.phone_number,
-    id: Math.random() * 10e16,
+    id: Math.random() * 10e16
   };
 
   phonebook_data = phonebook_data.concat(new_contact);
   overwrite_json_file(phonebook_file_path, { phonebook: phonebook_data });
   res.json(new_contact);
 });
+
+app.use(unknown_route);
 
 module.exports = { app };
