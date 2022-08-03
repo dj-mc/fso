@@ -1,6 +1,7 @@
 const express = require('express');
 const { parse_json_file, overwrite_json_file } = require('./utilities');
 const { request_logger, unknown_route } = require('./middleware');
+const cors = require('cors');
 
 let notes_data = [];
 let notes_file_path = './notes.json';
@@ -11,6 +12,7 @@ parse_json_file(notes_file_path).then((result) => {
 const app = express();
 app.use(express.json());
 app.use(request_logger);
+app.use(cors());
 
 app.get('/', (req, res) => {
   res.send(`<h1>Notes Homepage</h1>`);

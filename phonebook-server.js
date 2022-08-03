@@ -1,6 +1,7 @@
 const express = require('express');
 const { parse_json_file, overwrite_json_file } = require('./utilities');
 const { request_logger, unknown_route } = require('./middleware');
+const cors = require('cors');
 
 let phonebook_data = [];
 let phonebook_file_path = './phonebook.json';
@@ -11,6 +12,7 @@ parse_json_file(phonebook_file_path).then((result) => {
 const app = express();
 app.use(express.json());
 app.use(request_logger);
+app.use(cors());
 
 app.get('/', (req, res) => {
   res.send(`<h1>Phonebook Homepage</h1>`);

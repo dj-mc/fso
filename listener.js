@@ -15,9 +15,11 @@ app.get('/', (req, res) => {
   res.send(`<h1>Home</h1>`);
 });
 
+const PORT = process.env.PORT || 9001;
+
 app
   .use('/notes', require('./notes-server').app)
   .use('/phonebook', require('./phonebook-server').app)
-  .listen(9001);
+  .listen(PORT);
 
 console.log('Listener is serving to http://127.0.0.1:9001/');
