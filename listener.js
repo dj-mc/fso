@@ -1,7 +1,10 @@
+const path = require('path');
 const express = require('express');
 const morgan = require('morgan');
+const favicon = require('serve-favicon');
 
 const app = express();
+app.use(favicon(path.join(__dirname, 'static', 'dragon.png')));
 
 morgan.token('body', (req) => {
   return JSON.stringify(req.body);
@@ -12,8 +15,24 @@ app.use(
 );
 
 app.get('/', (req, res) => {
-  res.send(`<h1>Home</h1>`);
+  res.sendFile(__dirname + '/index.html');
 });
+
+app.use(
+  '/static',
+  express.static(path.join(__dirname, '/static'), {
+    index: false,
+    extensions: ['css', 'png']
+  })
+);
+
+app.use(
+  '/dist',
+  express.static(path.join(__dirname, '/dist'), {
+    index: false,
+    extensions: ['js', 'js.map']
+  })
+);
 
 const PORT = process.env.PORT || 9001;
 
