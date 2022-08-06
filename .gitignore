@@ -1,4 +1,2 @@
-dist
 node_modules
-static
-index.html
+dist/app.js.map

@@ -5,10 +5,11 @@
   "main": "index.js",
   "scripts": {
     "dev": "npx nodemon listener.js",
-    "curl": "curl localhost:9001/notes/api/3 && curl localhost:9001/phonebook/api/3",
-    "pretty": "npx prettier --write *.js",
-    "lint": "npx eslint .",
-    "clean": "rm -rf dist static index.html"
+    "lint": "npx eslint ./*.js",
+    "pretty": "npx prettier --write ./*.js",
+    "clean": "rm -rf dist static index.html",
+    "build:ui": "npm run clean && cd ../esb-r && npm run build && npm run dist",
+    "deploy": "git push heroku HEAD:master"
   },
   "author": "dj-mc",
   "license": "ISC",
