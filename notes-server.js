@@ -4,7 +4,7 @@ const { request_logger, unknown_route } = require('./middleware');
 const cors = require('cors');
 
 let notes_data = [];
-let notes_file_path = './notes.json';
+const notes_file_path = './notes.json';
 parse_json_file(notes_file_path).then((result) => {
   notes_data = notes_data.concat(result.notes);
 });

@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "npx nodemon listener.js",
+    "debug": "node --inspect listener.js",
     "lint": "npx eslint ./*.js",
     "pretty": "npx prettier --write ./*.js",
     "clean": "rm -rf dist static index.html",

@@ -4,7 +4,7 @@ const { request_logger, unknown_route } = require('./middleware');
 const cors = require('cors');
 
 let phonebook_data = [];
-let phonebook_file_path = './phonebook.json';
+const phonebook_file_path = './phonebook.json';
 parse_json_file(phonebook_file_path).then((result) => {
   phonebook_data = phonebook_data.concat(result.phonebook);
 });
