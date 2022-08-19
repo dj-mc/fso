@@ -8,6 +8,7 @@
     "debug": "node --inspect listener.js",
     "lint": "npx eslint ./*.js",
     "pretty": "npx prettier --write ./*.js",
+    "check": "npm run lint && npm run pretty",
     "clean": "rm -rf dist static index.html",
     "build:ui": "npm run clean && cd ../esb-r && npm run build && npm run dist",
     "deploy": "git push heroku HEAD:master"
@@ -20,5 +21,8 @@
     "mongoose": "^6.5.1",
     "morgan": "^1.10.0",
     "serve-favicon": "^2.5.0"
+  },
+  "devDependencies": {
+    "dotenv": "^16.0.1"
   }
 }
