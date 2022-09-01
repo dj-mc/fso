@@ -1,14 +1,11 @@
 const express = require('express');
-// const { parse_json_file, overwrite_json_file } = require('./utilities');
-const { request_logger, unknown_route } = require('./middleware');
-const cors = require('cors');
 const { Contact } = require('./models');
-
-// let phonebook_data = [];
-// const phonebook_file_path = './phonebook.json';
-// parse_json_file(phonebook_file_path).then((result) => {
-// phonebook_data = phonebook_data.concat(result.phonebook);
-// });
+const {
+  request_logger,
+  unknown_route,
+  error_handler
+} = require('./middleware');
+const cors = require('cors');
 
 const app = express();
 app.use(express.json());
@@ -34,26 +31,19 @@ app.get('/info', (req, res) => {
   );
 });
 
-// const get_contact = (target_contact_id) => {
-//   let target_contact = undefined;
-//   Contact.findById(target_contact_id).then((found_contact) => {
-//     target_contact = found_contact;
-//   });
-//   return target_contact;
-// };
-
-app.get('/api/:id', (req, res) => {
-  Contact.findById(req.params.id).then((found_contact) => {
-    res.json(found_contact);
-  });
-  // const target_contact_id = Number(req.params.id);
-  // const target_contact = get_contact(target_contact_id);
-  // if (target_contact) {
-  //   res.json(target_contact);
-  // } else {
-  //   res.statusMessage = `Couldn't find contact with id: ${target_contact_id}`;
-  //   res.status(404).end();
-  // }
+app.get('/api/:id', (req, res, next) => {
+  const target_id = req.params.id;
+  Contact.findById(target_id)
+    .then((found_contact) => {
+      if (found_contact) {
+        res.json(found_contact);
+      } else {
+        res.status(400).send(`Couldn't find contact with id: ${target_id}`);
+      }
+    })
+    .catch((error) => {
+      next(error);
+    });
 });
 
 app.delete('/api/:id', (req, res) => {
@@ -90,13 +80,12 @@ app.post('/api', (req, res) => {
     id: Math.random() * 10e16
   });
 
-  // phonebook_data = phonebook_data.concat(new_contact);
-  // overwrite_json_file(phonebook_file_path, { phonebook: phonebook_data });
   new_contact.save().then((saved_contact) => {
     res.json(saved_contact);
   });
 });
 
 app.use(unknown_route);
+app.use(error_handler);
 
 module.exports = { app };

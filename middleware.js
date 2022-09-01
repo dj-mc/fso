@@ -11,7 +11,16 @@ const unknown_route = (request, response) => {
   response.status(404).send({ error: 'Requested route not found' });
 };
 
+const error_handler = (error, request, response, next) => {
+  console.error(error.message);
+  if (error.name === 'CastError') {
+    return response.status(400).send({ error: 'malformed id' });
+  }
+  next(error);
+};
+
 module.exports = {
   request_logger,
-  unknown_route
+  unknown_route,
+  error_handler
 };
