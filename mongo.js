@@ -48,4 +48,4 @@ mongoose
 
     return mongoose.connection.close();
   })
-  .catch((err) => console.error(err));
+  .catch((err) => console.log(err));
