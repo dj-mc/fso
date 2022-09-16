@@ -1,5 +1,6 @@
 const express = require('express');
-const { Contact } = require('./models');
+const Contact = require('./models/Contact');
+// const { Contact, new_contact } = require('./models/Contact');
 const {
   request_logger,
   unknown_route,
@@ -46,20 +47,16 @@ app.get('/api/:id', (req, res, next) => {
     });
 });
 
-app.delete('/api/:id', (req, res) => {
-  // const target_contact_id = Number(req.params.id);
-  // const target_contact = get_contact(target_contact_id);
-  // if (target_contact) {
-  //   phonebook_data = phonebook_data.filter(
-  //     (contact) => contact.id !== target_contact_id
-  //   );
-  //   overwrite_json_file(phonebook_file_path, { phonebook: phonebook_data });
-  //   console.log(`Deletion of ${target_contact} successful`);
-  //   res.status(200).end();
-  // } else {
-  //   res.statusMessage = `Couldn't find note with id: ${target_contact_id}`;
-  //   res.status(404).end();
-  // }
+app.delete('/api/:id', (req, res, next) => {
+  const target_id = Number(req.params.id);
+  Contact.findByIdAndDelete(target_id)
+    .then((result) => {
+      console.log(`Deleted: ${result}`);
+      res.status(204).end();
+    })
+    .catch((error) => {
+      next(error);
+    });
 });
 
 app.post('/api', (req, res) => {
@@ -76,13 +73,17 @@ app.post('/api', (req, res) => {
 
   const new_contact = new Contact({
     name: req_body.name,
-    phone_number: req_body.phone_number,
-    id: Math.random() * 10e16
+    phone_number: req_body.phone_number
   });
-
   new_contact.save().then((saved_contact) => {
     res.json(saved_contact);
   });
+
+  // new_contact(req_body)
+  //   .save()
+  //   .then((saved_contact) => {
+  //     res.json(saved_contact);
+  //   });
 });
 
 app.use(unknown_route);
