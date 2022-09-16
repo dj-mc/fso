@@ -1,6 +1,7 @@
 require('dotenv').config();
 const mongoose = require('mongoose');
-const { Note, save_new_note, Contact, save_new_contact } = require('./models');
+const Note = require('./models/Note');
+const Contact = require('./models/Contact');
 
 // CLI to mongodb
 // node mongo.js notes <data>
@@ -11,41 +12,51 @@ if (process.argv.length < 3) {
   process.exit(1);
 }
 
-const mongodb_uri = process.env.MONGODB_URI;
+const mongodb_URI = process.env.MONGODB_URI;
 const db = process.argv[2]; // Expecting notes or phonebook
-// Expecting a quoted JSON string eg '{"data":42, "error":true}'
+// Expecting a quoted JSON string e.g. '{"data":42, "error":true}'
 const json_data = JSON.parse(process.argv[3]);
 
 mongoose
-  .connect(mongodb_uri)
-
+  .connect(mongodb_URI)
   .then((_) => {
-    console.log('Connected to mongoose.');
-    switch (db) {
-      case 'notes':
-        return save_new_note(json_data);
-      case 'phonebook':
-        return save_new_contact(json_data);
-      default:
-        return () => {
-          console.log(`Couldn't find ${db}`);
-          process.exit(1);
-        };
-    }
+    console.log(`Connected to ${mongodb_URI}`);
   })
+  .catch((error) => {
+    console.log(error.message);
+  });
 
-  .then(() => {
+switch (db) {
+  case 'notes':
+    const new_note = new Note({
+      content: json_data.content,
+      date: new Date(),
+      important: json_data.important || false
+    });
+    new_note.save();
     Note.find({}).then((result) => {
       result.forEach((note) => {
         console.log(note);
       });
+      mongoose.connection.close();
     });
+    break;
+
+  case 'phonebook':
+    const new_contact = new Contact({
+      name: json_data.name,
+      phone_number: json_data.phone_number
+    });
+    new_contact.save();
     Contact.find({}).then((result) => {
       result.forEach((contact) => {
         console.log(contact);
       });
+      mongoose.connection.close();
     });
+    break;
 
-    return mongoose.connection.close();
-  })
-  .catch((err) => console.log(err));
+  default:
+    console.log(`Couldn't find ${db}`);
+    process.exit(1);
+}
