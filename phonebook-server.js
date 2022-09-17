@@ -86,6 +86,20 @@ app.post('/api', (req, res) => {
   //   });
 });
 
+app.put('/api/:id', (req, res, next) => {
+  const req_body = req.body;
+  const target_id = req.params.id;
+  const updated_contact = {
+    name: req_body.name,
+    phone_number: req_body.phone_number
+  };
+  Contact.findByIdAndUpdate(target_id, updated_contact, { new: true })
+    .then((updated_contact_result) => {
+      res.json(updated_contact_result);
+    })
+    .catch((error) => next(error));
+});
+
 app.use(unknown_route);
 app.use(error_handler);
 
