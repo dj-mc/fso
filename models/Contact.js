@@ -12,9 +12,15 @@ mongoose
   });
 
 const contact_schema = new mongoose.Schema({
-  name: { type: String },
-  phone_number: { type: String },
-  id: { type: Number }
+  name: {
+    type: String,
+    minLength: 3,
+    required: true
+  },
+  phone_number: {
+    type: String,
+    required: true
+  }
 });
 
 contact_schema.set('toJSON', {

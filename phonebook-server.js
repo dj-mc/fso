@@ -1,6 +1,5 @@
 const express = require('express');
-const Contact = require('./models/Contact');
-// const { Contact, new_contact } = require('./models/Contact');
+const { Contact, new_contact } = require('./models/Contact');
 const {
   request_logger,
   unknown_route,
@@ -48,7 +47,7 @@ app.get('/api/:id', (req, res, next) => {
 });
 
 app.delete('/api/:id', (req, res, next) => {
-  const target_id = Number(req.params.id);
+  const target_id = req.params.id;
   Contact.findByIdAndDelete(target_id)
     .then((result) => {
       console.log(`Deleted: ${result}`);
@@ -66,24 +65,13 @@ app.post('/api', (req, res) => {
   }
 
   // TODO:
-  // - handle posting duplicate name or phone number
-  // - update their old number if their name already exists
   // - add multiple numbers per contact
-  // - only one name per contact
 
-  const new_contact = new Contact({
-    name: req_body.name,
-    phone_number: req_body.phone_number
-  });
-  new_contact.save().then((saved_contact) => {
-    res.json(saved_contact);
-  });
-
-  // new_contact(req_body)
-  //   .save()
-  //   .then((saved_contact) => {
-  //     res.json(saved_contact);
-  //   });
+  new_contact(req_body)
+    .save()
+    .then((saved_contact) => {
+      res.json(saved_contact);
+    });
 });
 
 app.put('/api/:id', (req, res, next) => {

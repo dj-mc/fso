@@ -1,6 +1,5 @@
 const express = require('express');
-const Note = require('./models/Note');
-// const { Note, new_note } = require('./models/Note');
+const { Note, new_note } = require('./models/Note');
 const {
   request_logger,
   unknown_route,
@@ -50,26 +49,18 @@ app.delete('/api/:id', (req, res, next) => {
     });
 });
 
-app.post('/api', (req, res) => {
+app.post('/api', (req, res, next) => {
   const req_body = req.body;
   if (!req_body.content) {
     return res.status(400).json({ error: 'Content not found' });
   }
 
-  const new_note = new Note({
-    content: req_body.content,
-    date: new Date(),
-    important: req_body.important || false
-  });
-  new_note.save().then((saved_note) => {
-    res.json(saved_note);
-  });
-
-  // new_note(req_body)
-  //   .save()
-  //   .then((saved_note) => {
-  //     res.json(saved_note);
-  //   });
+  new_note(req_body)
+    .save()
+    .then((saved_note) => {
+      res.json(saved_note);
+    })
+    .catch((error) => next(error));
 });
 
 app.put('/api/:id', (req, res, next) => {
@@ -79,7 +70,11 @@ app.put('/api/:id', (req, res, next) => {
     content: req_body.content,
     important: req_body.important
   };
-  Note.findByIdAndUpdate(target_id, updated_note, { new: true })
+  Note.findByIdAndUpdate(target_id, updated_note, {
+    new: true,
+    runValidators: true,
+    context: 'query'
+  })
     .then((updated_note_result) => {
       console.log("Toggled note's importance");
       res.json(updated_note_result);
