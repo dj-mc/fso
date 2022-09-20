@@ -12,8 +12,12 @@ mongoose
   });
 
 const note_schema = new mongoose.Schema({
-  content: { type: String },
-  date: { type: Date },
+  content: {
+    type: String,
+    minLength: 5,
+    required: true
+  },
+  date: { type: Date, required: true },
   important: { type: Boolean }
 });
 
@@ -33,15 +37,14 @@ note_schema.set('toObject', {
   }
 });
 
-// const Note = mongoose.model('Note', note_schema);
+const Note = mongoose.model('Note', note_schema);
 
-// const new_note = (req_body) => {
-//   return new Note({
-//     content: req_body.content,
-//     date: new Date(),
-//     important: req_body.important || false
-//   });
-// };
+const new_note = (req_body) => {
+  return new Note({
+    content: req_body.content,
+    date: new Date(),
+    important: req_body.important || false
+  });
+};
 
-// module.exports = { Note, new_note };
-module.exports = mongoose.model('Note', note_schema);
+module.exports = { Note, new_note };

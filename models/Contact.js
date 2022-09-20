@@ -33,14 +33,13 @@ contact_schema.set('toObject', {
   }
 });
 
-// const Contact = mongoose.model('Contact', contact_schema);
+const Contact = mongoose.model('Contact', contact_schema);
 
-// const new_contact = (req_body) => {
-//   return new Contact({
-//     name: req_body.name,
-//     phone_number: req_body.phone_number
-//   });
-// };
+const new_contact = (req_body) => {
+  return new Contact({
+    name: req_body.name,
+    phone_number: req_body.phone_number
+  });
+};
 
-// module.exports = { Contact, new_contact };
-module.exports = mongoose.model('Contact', contact_schema);
+module.exports = { Contact, new_contact };
