@@ -4,7 +4,7 @@
   "description": "Backend of FullStackOpen's course (part III)",
   "main": "index.js",
   "scripts": {
-    "dev": "npx nodemon listener.js",
+    "dev": "npx nodemon --require dotenv/config listener.js",
     "debug": "node --inspect listener.js",
     "lint": "npx eslint ./*.js",
     "pretty": "npx prettier --write ./*.js",
@@ -17,13 +17,13 @@
   "license": "ISC",
   "dependencies": {
     "cors": "^2.8.5",
+    "dotenv": "^16.0.1",
     "express": "^4.18.1",
     "mongoose": "^6.5.3",
     "morgan": "^1.10.0",
     "serve-favicon": "^2.5.0"
   },
   "devDependencies": {
-    "dotenv": "^16.0.1",
     "eslint": "^8.23.1"
   }
 }

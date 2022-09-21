@@ -3,8 +3,8 @@ const fs = require('fs');
 const read_utf8_file = (file_path) => {
   return new Promise((resolve, reject) => {
     try {
-      fs.readFile(file_path, 'utf8', function read(err, data) {
-        if (err) throw err;
+      fs.readFile(file_path, 'utf8', function read(error, data) {
+        if (error) throw error;
         resolve(data);
       });
     } catch (err) {

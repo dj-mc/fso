@@ -1,4 +1,3 @@
-require('dotenv').config();
 const mongoose = require('mongoose');
 const { Note, new_note } = require('./models/Note');
 const { Contact, new_contact } = require('./models/Contact');
