@@ -1,1 +1,1 @@
-web: node listener.js
+web: node -r dotenv/config listener.js
