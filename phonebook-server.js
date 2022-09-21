@@ -41,9 +41,7 @@ app.get('/api/:id', (req, res, next) => {
         res.status(400).send(`Couldn't find contact with id: ${target_id}`);
       }
     })
-    .catch((error) => {
-      next(error);
-    });
+    .catch((error) => next(error));
 });
 
 app.delete('/api/:id', (req, res, next) => {
@@ -53,15 +51,15 @@ app.delete('/api/:id', (req, res, next) => {
       console.log(`Deleted: ${result}`);
       res.status(204).end();
     })
-    .catch((error) => {
-      next(error);
-    });
+    .catch((error) => next(error));
 });
 
-app.post('/api', (req, res) => {
+app.post('/api', (req, res, next) => {
   const req_body = req.body;
   if (!req_body.name || !req_body.phone_number) {
-    return res.status(400).json({ error: 'Not enough information' });
+    return res
+      .status(400)
+      .json({ error: 'Please provide a valid name and number' });
   }
 
   // TODO:
@@ -71,7 +69,8 @@ app.post('/api', (req, res) => {
     .save()
     .then((saved_contact) => {
       res.json(saved_contact);
-    });
+    })
+    .catch((error) => next(error));
 });
 
 app.put('/api/:id', (req, res, next) => {
@@ -81,7 +80,11 @@ app.put('/api/:id', (req, res, next) => {
     name: req_body.name,
     phone_number: req_body.phone_number
   };
-  Contact.findByIdAndUpdate(target_id, updated_contact, { new: true })
+  Contact.findByIdAndUpdate(target_id, updated_contact, {
+    new: true,
+    runValidators: true,
+    context: 'query'
+  })
     .then((updated_contact_result) => {
       res.json(updated_contact_result);
     })

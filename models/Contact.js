@@ -19,6 +19,13 @@ const contact_schema = new mongoose.Schema({
   },
   phone_number: {
     type: String,
+    minLength: 12,
+    validate: {
+      validator: (v) => {
+        // 123-567-9112
+        return /\d{3}-\d{3}-\d{4}/.test(v);
+      }
+    },
     required: true
   }
 });
