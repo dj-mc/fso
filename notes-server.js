@@ -1,16 +1,7 @@
 const express = require('express');
 const { Note, new_note } = require('./models/Note');
-const {
-  request_logger,
-  unknown_route,
-  error_handler
-} = require('./middleware');
-const cors = require('cors');
 
-const app = express();
-app.use(express.json());
-app.use(request_logger);
-app.use(cors());
+const app = express.Router();
 
 app.get('/', (req, res) => {
   res.send(`<h1>Notes Homepage</h1>`);
@@ -81,8 +72,5 @@ app.put('/api/:id', (req, res, next) => {
     })
     .catch((error) => next(error));
 });
-
-app.use(unknown_route);
-app.use(error_handler);
 
 module.exports = { app };

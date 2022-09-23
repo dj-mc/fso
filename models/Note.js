@@ -1,14 +1,4 @@
 const mongoose = require('mongoose');
-const mongodb_URI = process.env.MONGODB_URI;
-
-mongoose
-  .connect(mongodb_URI)
-  .then((_) => {
-    console.log(`Connected to ${mongodb_URI}`);
-  })
-  .catch((error) => {
-    console.log(error.message);
-  });
 
 const note_schema = new mongoose.Schema({
   content: {
