@@ -1,6 +1,7 @@
 {
   "env": {
-    "es6": true,
+    "commonjs": true,
+    "es2021": true,
     "node": true
   },
   "parserOptions": {
@@ -8,11 +9,11 @@
     "ecmaVersion": "latest"
   },
   "rules": {
+    "eqeqeq": "error",
     "no-undef": 2,
     "no-unused-vars": [
       2,
-      { "varsIgnorePattern": "_" },
-      { "argsIgnorePattern": "_" }
+      { "argsIgnorePattern": "_", "varsIgnorePattern": "_" }
     ],
     "no-use-before-define": 2,
     "no-sequences": "off",
