@@ -58,8 +58,8 @@ app.get('/', (req, res) => {
 });
 
 app
-  .use('/notes', require('./notes-server').app)
-  .use('/phonebook', require('./phonebook-server').app)
+  .use('/notes', require('./routers/notes-server').app)
+  .use('/phonebook', require('./routers/phonebook-server').app)
   .listen(PORT);
 
 app.use(unknown_route);

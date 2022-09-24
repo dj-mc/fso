@@ -1,5 +1,5 @@
 const express = require('express');
-const { Note, new_note } = require('./models/Note');
+const { Note, new_note } = require('../models/Note');
 
 const app = express.Router();
 
