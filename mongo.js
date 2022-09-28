@@ -1,10 +1,13 @@
+require('dotenv').config();
 const mongoose = require('mongoose');
 const { Note, new_note } = require('./models/Note');
 const { Contact, new_contact } = require('./models/Contact');
+const { Blog, new_blog_listing } = require('./models/Blog');
 
 // CLI to mongodb
 // node mongo.js notes <data>
 // node mongo.js phonebook <data>
+// node mongo.js blog <data>
 
 if (process.argv.length < 3) {
   console.log('Missing arguments? Try: node mongo.js <db> <data>');
@@ -41,6 +44,16 @@ switch (db) {
     Contact.find({}).then((result) => {
       result.forEach((contact) => {
         console.log(contact);
+      });
+      mongoose.connection.close();
+    });
+    break;
+
+  case 'blog':
+    new_blog_listing(json_data).save();
+    Blog.find({}).then((result) => {
+      result.forEach((listing) => {
+        console.log(listing);
       });
       mongoose.connection.close();
     });
