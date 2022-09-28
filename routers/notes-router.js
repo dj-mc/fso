@@ -1,19 +1,19 @@
 const express = require('express');
 const { Note, new_note } = require('../models/Note');
 
-const app = express.Router();
+const NotesRouter = express.Router();
 
-app.get('/', (req, res) => {
+NotesRouter.get('/', (req, res) => {
   res.send(`<h1>Notes Homepage</h1>`);
 });
 
-app.get('/api', (req, res) => {
+NotesRouter.get('/api', (req, res) => {
   Note.find({}).then((notes) => {
     res.json(notes);
   });
 });
 
-app.get('/api/:id', (req, res, next) => {
+NotesRouter.get('/api/:id', (req, res, next) => {
   const target_id = req.params.id;
   Note.findById(target_id)
     .then((found_note) => {
@@ -28,7 +28,7 @@ app.get('/api/:id', (req, res, next) => {
     });
 });
 
-app.delete('/api/:id', (req, res, next) => {
+NotesRouter.delete('/api/:id', (req, res, next) => {
   const target_id = req.params.id;
   Note.findByIdAndDelete(target_id)
     .then((result) => {
@@ -40,7 +40,7 @@ app.delete('/api/:id', (req, res, next) => {
     });
 });
 
-app.post('/api', (req, res, next) => {
+NotesRouter.post('/api', (req, res, next) => {
   const req_body = req.body;
   if (!req_body.content) {
     return res.status(400).json({ error: 'Content not found' });
@@ -54,7 +54,7 @@ app.post('/api', (req, res, next) => {
     .catch((error) => next(error));
 });
 
-app.put('/api/:id', (req, res, next) => {
+NotesRouter.put('/api/:id', (req, res, next) => {
   const req_body = req.body;
   const target_id = req.params.id;
   const updated_note = {
@@ -73,4 +73,4 @@ app.put('/api/:id', (req, res, next) => {
     .catch((error) => next(error));
 });
 
-module.exports = { app };
+module.exports = { app: NotesRouter };

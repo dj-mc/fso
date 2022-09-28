@@ -1,19 +1,19 @@
 const express = require('express');
 const { Contact, new_contact } = require('../models/Contact');
 
-const app = express.Router();
+const PhonebookRouter = express.Router();
 
-app.get('/', (req, res) => {
+PhonebookRouter.get('/', (req, res) => {
   res.send(`<h1>Phonebook Homepage</h1>`);
 });
 
-app.get('/api', (req, res) => {
+PhonebookRouter.get('/api', (req, res) => {
   Contact.find({}).then((contacts) => {
     res.json(contacts);
   });
 });
 
-app.get('/info', (req, res) => {
+PhonebookRouter.get('/info', (req, res) => {
   res.send(
     `You have ${Contact.find({}).length} contacts
     </br>
@@ -22,7 +22,7 @@ app.get('/info', (req, res) => {
   );
 });
 
-app.get('/api/:id', (req, res, next) => {
+PhonebookRouter.get('/api/:id', (req, res, next) => {
   const target_id = req.params.id;
   Contact.findById(target_id)
     .then((found_contact) => {
@@ -35,7 +35,7 @@ app.get('/api/:id', (req, res, next) => {
     .catch((error) => next(error));
 });
 
-app.delete('/api/:id', (req, res, next) => {
+PhonebookRouter.delete('/api/:id', (req, res, next) => {
   const target_id = req.params.id;
   Contact.findByIdAndDelete(target_id)
     .then((result) => {
@@ -45,7 +45,7 @@ app.delete('/api/:id', (req, res, next) => {
     .catch((error) => next(error));
 });
 
-app.post('/api', (req, res, next) => {
+PhonebookRouter.post('/api', (req, res, next) => {
   const req_body = req.body;
   if (!req_body.name || !req_body.phone_number) {
     return res
@@ -64,7 +64,7 @@ app.post('/api', (req, res, next) => {
     .catch((error) => next(error));
 });
 
-app.put('/api/:id', (req, res, next) => {
+PhonebookRouter.put('/api/:id', (req, res, next) => {
   const req_body = req.body;
   const target_id = req.params.id;
   const updated_contact = {
@@ -82,4 +82,4 @@ app.put('/api/:id', (req, res, next) => {
     .catch((error) => next(error));
 });
 
-module.exports = { app };
+module.exports = { app: PhonebookRouter };
