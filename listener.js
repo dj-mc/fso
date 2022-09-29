@@ -3,7 +3,7 @@ const express = require('express');
 const morgan = require('morgan');
 const favicon = require('serve-favicon');
 const mongoose = require('mongoose');
-const { PORT, mongodb_URI } = require('./utils/config');
+const { PORT, mongodb_URI } = require('./utils/config-environment');
 const {
   request_logger,
   unknown_route,
@@ -58,7 +58,8 @@ app.get('/', (req, res) => {
 });
 
 app
-  .use('/notes', require('./routers/notes-router').app)
+  .use('/blogs', require('./routers/blog-list-router').app)
+  .use('/notes', require('./routers/notes-list-router').app)
   .use('/phonebook', require('./routers/phonebook-router').app)
   .listen(PORT);
 
