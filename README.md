@@ -12,8 +12,8 @@ functionality intact. For example, for parts 0-2 I skipped straight to using
 a custom configuration of esbuild + typescript instead of using CRA, webpack,
 babel, etc. to compile jsx; because I wanted to learn those specific tools.
 
-Learning to harness strict types onto react code was certainly interesting.  
-I'm not using esbuild + typescript here (the backend) because there is no jsx to compile.
+Learning to harness strict types onto react code was certainly interesting. I'm
+not using esbuild + typescript here because there is no jsx to compile.
 
 ## notes to myself
 
@@ -23,4 +23,5 @@ You may need to whitelist your IP address.
 `heroku config:set MONGODB_URI=<uri>`  
 `git push heroku HEAD:master`
 
-`dotenv` is installed as a normal dependency because Heroku was not installing dev deps last I tried.
+`dotenv` and `cross-env` are installed as normal dependencies because heroku was
+not installing dev deps last I tried.
