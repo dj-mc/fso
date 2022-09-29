@@ -1,23 +1,25 @@
 {
   "name": "fso",
   "version": "1.0.0",
-  "description": "Backend of FullStackOpen's course (part III)",
+  "description": "Backend of FullStackOpen's course (parts 3 and 4)",
   "main": "index.js",
   "scripts": {
-    "dev": "npx nodemon --require dotenv/config listener.js",
-    "debug": "node --inspect listener.js",
-    "lint": "npx eslint ./*.js",
-    "pretty": "npx prettier --write ./*.js",
-    "check": "npm run lint && npm run pretty",
+    "start": "NODE_ENV=production node --require dotenv/config listener.js",
+    "dev": "NODE_ENV=development npx nodemon --require dotenv/config listener.js",
+    "debug": "NODE_ENV=development node --inspect --require dotenv/config listener.js",
+    "test": "NODE_ENV=test jest --verbose --runInBand",
     "clean": "rm -rf dist static index.html",
     "build:ui": "npm run clean && cd ../esb-r && npm run build && npm run dist",
     "deploy": "git push heroku HEAD:master",
-    "test": "jest --verbose"
+    "lint": "npx eslint ./*.js",
+    "pretty": "npx prettier --write ./*.js",
+    "check": "npm run lint && npm run pretty"
   },
   "author": "dj-mc",
   "license": "ISC",
   "dependencies": {
     "cors": "^2.8.5",
+    "cross-env": "^7.0.3",
     "dotenv": "^16.0.1",
     "express": "^4.18.1",
     "mongoose": "^6.5.3",
