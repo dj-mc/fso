@@ -14,15 +14,15 @@ if (process.argv.length < 3) {
   process.exit(1);
 }
 
-const mongodb_URI = process.env.MONGODB_URI;
+const MONGODB_URI = process.env.MONGODB_URI;
 const db = process.argv[2]; // Expecting notes or phonebook
 // Expecting a quoted JSON string e.g. '{"data":42, "error":true}'
 const json_data = JSON.parse(process.argv[3]);
 
 mongoose
-  .connect(mongodb_URI)
+  .connect(MONGODB_URI)
   .then((_) => {
-    console.log(`Connected to ${mongodb_URI}`);
+    console.log(`Connected to ${MONGODB_URI}`);
   })
   .catch((error) => {
     console.log(error.message);

@@ -1,6 +1,6 @@
 const { describe, expect, test } = require('@jest/globals');
 const { total_likes, favorite_blog } = require('../utils/blog-list-helper');
-const full_blog_list = require('../test-data/blog.json');
+const full_blog_list = require('../test-data/blog-list.json');
 
 describe('Total sum of likes in a blog list', () => {
   const one_article_blog_list = [

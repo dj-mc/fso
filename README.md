@@ -6,14 +6,11 @@ FullStackOpen is a web development course organized by University of Helsinki.
 Parts 0, 1, and 2 focused on the frontend, which I keep in [this](https://github.com/dj-mc/esb-r) repo.
 
 I've finished part 3 and I'm currently working on part 4, which I keep here.
-I've completed every exercise thrown at me (so far). I've also taken creative
-liberties on how the project is both written and organized, with its intended
-functionality intact. For example, for parts 0-2 I skipped straight to using
-a custom configuration of esbuild + typescript instead of using CRA, webpack,
-babel, etc. to compile jsx; because I wanted to learn those specific tools.
-
-Learning to harness strict types onto react code was certainly interesting. I'm
-not using esbuild + typescript here because there is no jsx to compile.
+As I complete the course exercises I also take creative liberties on how the
+project is both written and organized, with its intended functionality intact.
+For example: during parts 0-2 I configured esbuild + typescript to render
+react's jsx sugar, instead of using [CRA](https://create-react-app.dev/),
+webpack, babel, etc. to compile jsx; I wanted to learn those specific tools.
 
 ## notes to myself
 
