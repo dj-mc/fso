@@ -1,9 +1,12 @@
+require('dotenv').config();
+const config = require('./utils/config-environment');
+
 const path = require('path');
 const express = require('express');
 const morgan = require('morgan');
 const favicon = require('serve-favicon');
 const mongoose = require('mongoose');
-const { PORT, mongodb_URI } = require('./utils/config-environment');
+
 const {
   request_logger,
   unknown_route,
@@ -12,9 +15,9 @@ const {
 const cors = require('cors');
 
 mongoose
-  .connect(mongodb_URI)
+  .connect(config.MONGODB_URI)
   .then((_) => {
-    console.log(`Connected to ${mongodb_URI}`);
+    console.log(`Connected to ${config.MONGODB_URI}`);
   })
   .catch((error) => {
     console.log(error.message);
@@ -60,10 +63,9 @@ app.get('/', (req, res) => {
 app
   .use('/blogs', require('./routers/blog-list-router').app)
   .use('/notes', require('./routers/notes-list-router').app)
-  .use('/phonebook', require('./routers/phonebook-router').app)
-  .listen(PORT);
+  .use('/phonebook', require('./routers/phonebook-router').app);
 
 app.use(unknown_route);
 app.use(error_handler);
 
-console.log(`Listener is serving to http://127.0.0.1:${PORT}/`);
+module.exports = app;
