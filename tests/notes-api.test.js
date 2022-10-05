@@ -9,6 +9,8 @@ const {
 const supertest = require('supertest');
 const { Note } = require('../models/Note');
 
+// npm run test -- -t "notes"
+
 const init_notes_data = [
   { content: 'HTML is easy', date: new Date(), important: false },
   {
@@ -57,6 +59,26 @@ describe('/notes/api', () => {
     const response = await api.get('/notes/api');
     const contents = response.body.map((note) => note.content);
     expect(contents).toContain('Browser can execute only JavaScript');
+  });
+
+  test('posts a valid note to mongodb', async () => {
+    const new_note = {
+      content: 'async-await should be readable syntactic sugar',
+      important: true
+    };
+
+    await api
+      .post('/notes/api')
+      .send(new_note)
+      .expect(201)
+      .expect('Content-Type', /application\/json/);
+
+    const response = await api.get('/notes/api');
+    const all_content = response.body.map((r) => r.content);
+    expect(response.body).toHaveLength(init_notes_data.length + 1);
+    expect(all_content).toContain(
+      'async-await should be readable syntactic sugar'
+    );
   });
 });
 

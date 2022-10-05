@@ -7,10 +7,9 @@ NotesRouter.get('/', (req, res) => {
   res.send(`<h1>Notes Homepage</h1>`);
 });
 
-NotesRouter.get('/api', (req, res) => {
-  Note.find({}).then((notes) => {
-    res.json(notes);
-  });
+NotesRouter.get('/api', async (req, res) => {
+  const all_notes = await Note.find({});
+  res.json(all_notes);
 });
 
 NotesRouter.get('/api/:id', (req, res, next) => {
@@ -49,7 +48,7 @@ NotesRouter.post('/api', (req, res, next) => {
   new_note(req_body)
     .save()
     .then((saved_note) => {
-      res.json(saved_note);
+      res.status(201).json(saved_note);
     })
     .catch((error) => next(error));
 });
