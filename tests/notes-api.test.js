@@ -8,17 +8,9 @@ const {
 } = require('@jest/globals');
 const supertest = require('supertest');
 const { Note } = require('../models/Note');
+const { get_all_notes, init_notes_data } = require('./test-helper');
 
 // npm run test -- -t "notes"
-
-const init_notes_data = [
-  { content: 'HTML is easy', date: new Date(), important: false },
-  {
-    content: 'Browser can execute only JavaScript',
-    date: new Date(),
-    important: true
-  }
-];
 
 beforeEach(async () => {
   await Note.deleteMany({});
@@ -55,13 +47,13 @@ describe('/notes/api', () => {
     expect(response.body).toHaveLength(init_notes_data.length);
   });
 
-  test('returns a single, specified note', async () => {
+  test('contains a specifically added note', async () => {
     const response = await api.get('/notes/api');
     const contents = response.body.map((note) => note.content);
     expect(contents).toContain('Browser can execute only JavaScript');
   });
 
-  test('posts a valid note to mongodb', async () => {
+  test('posts a valid note to database', async () => {
     const new_note = {
       content: 'async-await should be readable syntactic sugar',
       important: true
@@ -73,12 +65,24 @@ describe('/notes/api', () => {
       .expect(201)
       .expect('Content-Type', /application\/json/);
 
-    const response = await api.get('/notes/api');
-    const all_content = response.body.map((r) => r.content);
-    expect(response.body).toHaveLength(init_notes_data.length + 1);
+    const all_notes = await get_all_notes();
+    expect(all_notes).toHaveLength(init_notes_data.length + 1);
+
+    const all_content = all_notes.map((r) => r.content);
     expect(all_content).toContain(
       'async-await should be readable syntactic sugar'
     );
+  });
+
+  test('refuses to post empty note content', async () => {
+    const new_note = {
+      important: true
+    };
+
+    await api.post('/notes/api').send(new_note).expect(400);
+
+    const all_notes = await get_all_notes();
+    expect(all_notes).toHaveLength(init_notes_data.length);
   });
 });
 
