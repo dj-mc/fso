@@ -84,6 +84,17 @@ describe('/notes/api', () => {
     const all_notes = await get_all_notes();
     expect(all_notes).toHaveLength(init_notes_data.length);
   });
+
+  test('returns a specific note via its ID', async () => {
+    const all_notes = await get_all_notes();
+    const first_note = all_notes[0];
+    const found_first_note = await api
+      .get(`/notes/api/${first_note.id}`)
+      .expect(200)
+      .expect('Content-Type', /application\/json/);
+    const parsed_note = JSON.parse(JSON.stringify(first_note));
+    expect(found_first_note.body).toEqual(parsed_note);
+  });
 });
 
 afterAll(() => {

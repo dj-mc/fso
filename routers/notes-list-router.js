@@ -39,18 +39,18 @@ NotesRouter.delete('/api/:id', (req, res, next) => {
     });
 });
 
-NotesRouter.post('/api', (req, res, next) => {
+NotesRouter.post('/api', async (req, res, next) => {
   const req_body = req.body;
   if (!req_body.content) {
     return res.status(400).json({ error: 'Content not found' });
   }
 
-  new_note(req_body)
-    .save()
-    .then((saved_note) => {
-      res.status(201).json(saved_note);
-    })
-    .catch((error) => next(error));
+  try {
+    const saved_note = await new_note(req_body).save();
+    res.status(201).json(saved_note);
+  } catch (exception) {
+    next(exception);
+  }
 });
 
 NotesRouter.put('/api/:id', (req, res, next) => {
