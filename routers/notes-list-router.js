@@ -12,31 +12,28 @@ NotesRouter.get('/api', async (req, res) => {
   res.json(all_notes);
 });
 
-NotesRouter.get('/api/:id', (req, res, next) => {
+NotesRouter.get('/api/:id', async (req, res, next) => {
   const target_id = req.params.id;
-  Note.findById(target_id)
-    .then((found_note) => {
-      if (found_note) {
-        res.json(found_note);
-      } else {
-        res.status(400).send(`Couldn't find contact with id: ${target_id}`);
-      }
-    })
-    .catch((error) => {
-      next(error);
-    });
+  try {
+    const target_note = await Note.findById(target_id);
+    if (target_note) {
+      res.json(target_note);
+    } else {
+      res.status(400).send(`Couldn't find contact with id: ${target_id}`);
+    }
+  } catch (exception) {
+    next(exception);
+  }
 });
 
-NotesRouter.delete('/api/:id', (req, res, next) => {
+NotesRouter.delete('/api/:id', async (req, res, next) => {
   const target_id = req.params.id;
-  Note.findByIdAndDelete(target_id)
-    .then((result) => {
-      console.log(`Deleted: ${result}`);
-      res.status(204).end();
-    })
-    .catch((error) => {
-      next(error);
-    });
+  try {
+    await Note.findByIdAndDelete(target_id);
+    res.status(204).end();
+  } catch (exception) {
+    next(exception);
+  }
 });
 
 NotesRouter.post('/api', async (req, res, next) => {
@@ -56,10 +53,12 @@ NotesRouter.post('/api', async (req, res, next) => {
 NotesRouter.put('/api/:id', (req, res, next) => {
   const req_body = req.body;
   const target_id = req.params.id;
+
   const updated_note = {
     content: req_body.content,
     important: req_body.important
   };
+
   Note.findByIdAndUpdate(target_id, updated_note, {
     new: true,
     runValidators: true,

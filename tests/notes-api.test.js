@@ -14,10 +14,19 @@ const { get_all_notes, init_notes_data } = require('./test-helper');
 
 beforeEach(async () => {
   await Note.deleteMany({});
-  let new_note = new Note(init_notes_data[0]);
-  await new_note.save();
-  new_note = new Note(init_notes_data[1]);
-  await new_note.save();
+  // If using forEach:
+  // Every iteration creates its own async function, so
+  // beforeEach cannot wait on forEach to finish executing.
+
+  const new_notes_mapped = init_notes_data.map((note) => new Note(note));
+  const new_notes_promises = new_notes_mapped.map((note) => note.save());
+  await Promise.all(new_notes_promises); // Fulfill promises (in parallel)
+
+  // If order matters (not parallel):
+  // for (let note of init_notes_data) {
+  //   let new_note = new Note(note);
+  //   await new_note.save();
+  // }
 });
 
 const app = require('../app');
@@ -92,8 +101,21 @@ describe('/notes/api', () => {
       .get(`/notes/api/${first_note.id}`)
       .expect(200)
       .expect('Content-Type', /application\/json/);
+
     const parsed_note = JSON.parse(JSON.stringify(first_note));
     expect(found_first_note.body).toEqual(parsed_note);
+  });
+
+  test('returns status 204 after deleting a note', async () => {
+    const all_notes = await get_all_notes();
+    const first_note = all_notes[0];
+    await api.delete(`/notes/api/${first_note.id}`).expect(204);
+
+    const altered_notes = await get_all_notes();
+    expect(altered_notes).toHaveLength(init_notes_data.length - 1);
+
+    const altered_contents = altered_notes.map((r) => r.content);
+    expect(altered_contents).not.toContain(first_note.content);
   });
 });
 
