@@ -4,6 +4,7 @@
     "es2021": true,
     "node": true
   },
+  "extends": ["prettier"],
   "parserOptions": {
     "sourceType": "script",
     "ecmaVersion": "latest"
