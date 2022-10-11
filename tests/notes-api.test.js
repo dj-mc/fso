@@ -8,7 +8,8 @@ const {
 } = require('@jest/globals');
 const supertest = require('supertest');
 const { Note } = require('../models/Note');
-const { get_all_notes, init_notes_data } = require('./test-helper');
+const { get_all_notes } = require('./test-helper');
+const { init_notes_data } = require('../test-data/notes-list-data.js');
 
 // npm run test -- -t "notes"
 
