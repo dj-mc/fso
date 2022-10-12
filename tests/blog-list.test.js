@@ -1,8 +1,42 @@
-const { describe, expect, test } = require('@jest/globals');
+const mongoose = require('mongoose');
+const {
+  afterAll,
+  beforeEach,
+  describe,
+  expect,
+  test
+} = require('@jest/globals');
+const supertest = require('supertest');
+const { Blog } = require('../models/Blog');
 const { total_likes, favorite_blog } = require('../utils/blog-list-helper');
-const full_blog_list = require('../test-data/blog-list.json');
+const init_blog_list = require('../test-data/blog-list.json').blogs;
 
-describe('Total sum of likes in a blog list', () => {
+const app = require('../app');
+const api = supertest(app);
+
+describe('/blogs/api', () => {
+  beforeEach(async () => {
+    await Blog.deleteMany({});
+    for (let blog of init_blog_list) {
+      let new_blog = new Blog(blog);
+      await new_blog.save();
+    }
+  });
+
+  test('returns the correct amount of blog posts in JSON format', async () => {
+    const response = await api.get('/blogs/api');
+    expect(response.body).toHaveLength(init_blog_list.length);
+  });
+
+  test('returns blog posts, each containing a unique id property', async () => {
+    const response = await api.get('/blogs/api');
+    for (let blog of response.body) {
+      expect(blog.id).toBeDefined();
+    }
+  });
+});
+
+describe('total_likes()', () => {
   const one_article_blog_list = [
     {
       _id: '5a422aa71b54a676234d17f8',
@@ -14,24 +48,30 @@ describe('Total sum of likes in a blog list', () => {
     }
   ];
 
-  test('equals the "likes" property data of its one article', () => {
+  test('equals the "likes" property data of its one blog listing', () => {
     const result = total_likes(one_article_blog_list);
     expect(result).toBe(5);
   });
 
-  test('equals the total number of likes in each listing', () => {
-    const result = total_likes(full_blog_list.blogs);
+  test('equals the total number of likes in each blog listing', () => {
+    const result = total_likes(init_blog_list);
     expect(result).toBe(36);
   });
 });
 
-test('Return the top blog listing according to likes', () => {
-  const result = favorite_blog(full_blog_list.blogs);
-  expect(result).toEqual({
-    // Exclude _id and __v
-    title: 'Canonical string reduction',
-    author: 'Edsger W. Dijkstra',
-    url: 'http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html',
-    likes: 12
+describe('favorite_blog()', () => {
+  test('returns the top blog listing according to likes', () => {
+    const result = favorite_blog(init_blog_list);
+    expect(result).toEqual({
+      // Exclude _id and __v
+      title: 'Canonical string reduction',
+      author: 'Edsger W. Dijkstra',
+      url: 'http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html',
+      likes: 12
+    });
   });
+});
+
+afterAll(() => {
+  mongoose.connection.close();
 });
