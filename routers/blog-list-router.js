@@ -12,12 +12,13 @@ BlogRouter.get('/api', async (req, res) => {
   res.json(blog_list);
 });
 
-BlogRouter.post('/api', (req, res) => {
-  new_blog_listing(req.body)
-    .save()
-    .then((saved_blog_listing) => {
-      res.status(201).json(saved_blog_listing);
-    });
+BlogRouter.post('/api', async (req, res, next) => {
+  try {
+    const saved_blog_listing = await new_blog_listing(req.body).save();
+    res.status(201).json(saved_blog_listing);
+  } catch (exception) {
+    next(exception);
+  }
 });
 
 module.exports = { app: BlogRouter };
