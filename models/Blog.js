@@ -44,8 +44,8 @@ const Blog = mongoose.model('Blog', blog_schema);
 
 const new_blog_listing = (req_body) => {
   return new Blog({
-    title: req_body.title || 'untitled',
-    author: req_body.author || 'anonymous',
+    title: req_body.title,
+    author: req_body.author,
     url: req_body.url,
     likes: req_body.likes || 0
   });

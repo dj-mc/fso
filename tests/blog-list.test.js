@@ -72,20 +72,9 @@ describe('/blogs/api', () => {
     expect(all_blogs_toJSON).toHaveLength(init_blog_list.length + 1);
   });
 
-  test('posts a blog listing with only the url property to database', async () => {
-    const new_blog = {
-      url: 'https://my.blog/asdf'
-    };
-
-    await api
-      .post('/blogs/api')
-      .send(new_blog)
-      .expect(201)
-      .expect('Content-Type', /application\/json/);
-
-    const all_blogs = await Blog.find({});
-    const all_blogs_toJSON = all_blogs.map((blog) => blog.toJSON());
-    expect(all_blogs_toJSON).toHaveLength(init_blog_list.length + 1);
+  test('returns status code 400 if new_blog has no title or url', async () => {
+    const new_blog = { author: 'John Doe', likes: 999 };
+    await api.post('/blogs/api').send(new_blog).expect(400);
   });
 });
 
