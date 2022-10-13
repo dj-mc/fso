@@ -1,8 +1,14 @@
 const mongoose = require('mongoose');
 
 const blog_schema = new mongoose.Schema({
-  title: String,
-  author: String,
+  title: {
+    type: String,
+    required: true
+  },
+  author: {
+    type: String,
+    required: true
+  },
   url: {
     type: String,
     required: true,
@@ -12,7 +18,10 @@ const blog_schema = new mongoose.Schema({
       }
     }
   },
-  likes: Number
+  likes: {
+    type: Number,
+    required: true
+  }
 });
 
 blog_schema.set('toJSON', {
@@ -35,10 +44,10 @@ const Blog = mongoose.model('Blog', blog_schema);
 
 const new_blog_listing = (req_body) => {
   return new Blog({
-    title: req_body.title,
-    author: req_body.author,
+    title: req_body.title || 'untitled',
+    author: req_body.author || 'anonymous',
     url: req_body.url,
-    likes: req_body.likes
+    likes: req_body.likes || 0
   });
 };
 

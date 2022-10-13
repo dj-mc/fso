@@ -35,12 +35,46 @@ describe('/blogs/api', () => {
     }
   });
 
-  test('posts a valid blog listing to databse', async () => {
+  test('posts a valid blog listing to database', async () => {
     const new_blog = {
       title: 'title of blog post',
       author: 'author of blog post',
       url: 'https://url.123/blog',
       likes: 3
+    };
+
+    await api
+      .post('/blogs/api')
+      .send(new_blog)
+      .expect(201)
+      .expect('Content-Type', /application\/json/);
+
+    const all_blogs = await Blog.find({});
+    const all_blogs_toJSON = all_blogs.map((blog) => blog.toJSON());
+    expect(all_blogs_toJSON).toHaveLength(init_blog_list.length + 1);
+  });
+
+  test('posts a blog listing with no likes property to database', async () => {
+    const new_blog = {
+      title: 'Programming Programs',
+      author: 'Programmer',
+      url: 'https://foo.369/vlog'
+    };
+
+    await api
+      .post('/blogs/api')
+      .send(new_blog)
+      .expect(201)
+      .expect('Content-Type', /application\/json/);
+
+    const all_blogs = await Blog.find({});
+    const all_blogs_toJSON = all_blogs.map((blog) => blog.toJSON());
+    expect(all_blogs_toJSON).toHaveLength(init_blog_list.length + 1);
+  });
+
+  test('posts a blog listing with only the url property to database', async () => {
+    const new_blog = {
+      url: 'https://my.blog/asdf'
     };
 
     await api
