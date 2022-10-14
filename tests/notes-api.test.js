@@ -15,14 +15,18 @@ const { init_notes_data } = require('../test-data/notes-list-data.js');
 
 beforeEach(async () => {
   await Note.deleteMany({});
+  await Note.insertMany(init_notes_data);
+
   // If using forEach:
   // Every iteration creates its own async function, so
   // beforeEach cannot wait on forEach to finish executing.
 
-  const new_notes_mapped = init_notes_data.map((note) => new Note(note));
-  const new_notes_promises = new_notes_mapped.map((note) => note.save());
-  await Promise.all(new_notes_promises); // Fulfill promises (in parallel)
+  // or:
+  // const new_notes_mapped = init_notes_data.map((note) => new Note(note));
+  // const new_notes_promises = new_notes_mapped.map((note) => note.save());
+  // await Promise.all(new_notes_promises); // Fulfill promises (in parallel)
 
+  // or:
   // If order matters (not parallel):
   // for (let note of init_notes_data) {
   //   let new_note = new Note(note);
