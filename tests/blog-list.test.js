@@ -76,6 +76,38 @@ describe('/blogs/api', () => {
     const new_blog = { author: 'John Doe', likes: 999 };
     await api.post('/blogs/api').send(new_blog).expect(400);
   });
+
+  test('returns status code 204 after deleting a blog post', async () => {
+    const all_blogs = await Blog.find({});
+    const all_blogs_toJSON = all_blogs.map((blog) => blog.toJSON());
+    const first_blog = all_blogs_toJSON[0];
+
+    await api.delete(`/blogs/api/${first_blog.id}`).expect(204);
+
+    const altered_blog_list = await Blog.find({});
+    const altered_blog_list_toJSON = altered_blog_list.map((blog) =>
+      blog.toJSON()
+    );
+    expect(altered_blog_list_toJSON).toHaveLength(init_blog_list.length - 1);
+  });
+
+  test('return status code 200 after updating a blog post', async () => {
+    const all_blogs = await Blog.find({});
+    const all_blogs_toJSON = all_blogs.map((blog) => blog.toJSON());
+    const first_blog = all_blogs_toJSON[0];
+
+    await api
+      .put(`/blogs/api/${first_blog.id}`)
+      .send({ likes: 99 })
+      .expect(200);
+
+    const altered_blog_list = await Blog.find({});
+    const altered_blog_list_toJSON = altered_blog_list.map((blog) =>
+      blog.toJSON()
+    );
+    const altered_first_blog = altered_blog_list_toJSON[0];
+    expect(altered_first_blog.likes).toEqual(99);
+  });
 });
 
 describe('total_likes()', () => {
