@@ -10,6 +10,7 @@ const supertest = require('supertest');
 const { Blog } = require('../models/Blog');
 const { total_likes, favorite_blog } = require('../utils/blog-list-helper');
 const init_blog_list = require('../test-data/blog-list.json').blogs;
+const { get_all_from_model } = require('../tests/test-helper');
 
 const app = require('../app');
 const api = supertest(app);
@@ -35,7 +36,7 @@ describe('/blogs/api', () => {
     }
   });
 
-  test('posts a valid blog listing to database', async () => {
+  test('posts a valid blog post to database', async () => {
     const new_blog = {
       title: 'title of blog post',
       author: 'author of blog post',
@@ -49,12 +50,11 @@ describe('/blogs/api', () => {
       .expect(201)
       .expect('Content-Type', /application\/json/);
 
-    const all_blogs = await Blog.find({});
-    const all_blogs_toJSON = all_blogs.map((blog) => blog.toJSON());
-    expect(all_blogs_toJSON).toHaveLength(init_blog_list.length + 1);
+    const all_blogs = await get_all_from_model(Blog);
+    expect(all_blogs).toHaveLength(init_blog_list.length + 1);
   });
 
-  test('posts a blog listing with no likes property to database', async () => {
+  test('posts a blog post with no likes property to database', async () => {
     const new_blog = {
       title: 'Programming Programs',
       author: 'Programmer',
@@ -67,9 +67,8 @@ describe('/blogs/api', () => {
       .expect(201)
       .expect('Content-Type', /application\/json/);
 
-    const all_blogs = await Blog.find({});
-    const all_blogs_toJSON = all_blogs.map((blog) => blog.toJSON());
-    expect(all_blogs_toJSON).toHaveLength(init_blog_list.length + 1);
+    const all_blogs = await get_all_from_model(Blog);
+    expect(all_blogs).toHaveLength(init_blog_list.length + 1);
   });
 
   test('returns status code 400 if new_blog has no title or url', async () => {
@@ -78,34 +77,26 @@ describe('/blogs/api', () => {
   });
 
   test('returns status code 204 after deleting a blog post', async () => {
-    const all_blogs = await Blog.find({});
-    const all_blogs_toJSON = all_blogs.map((blog) => blog.toJSON());
-    const first_blog = all_blogs_toJSON[0];
+    const all_blogs = await get_all_from_model(Blog);
+    const first_blog = all_blogs[0];
 
     await api.delete(`/blogs/api/${first_blog.id}`).expect(204);
 
-    const altered_blog_list = await Blog.find({});
-    const altered_blog_list_toJSON = altered_blog_list.map((blog) =>
-      blog.toJSON()
-    );
-    expect(altered_blog_list_toJSON).toHaveLength(init_blog_list.length - 1);
+    const altered_blog_list = await get_all_from_model(Blog);
+    expect(altered_blog_list).toHaveLength(init_blog_list.length - 1);
   });
 
   test('return status code 200 after updating a blog post', async () => {
-    const all_blogs = await Blog.find({});
-    const all_blogs_toJSON = all_blogs.map((blog) => blog.toJSON());
-    const first_blog = all_blogs_toJSON[0];
+    const all_blogs = await get_all_from_model(Blog);
+    const first_blog = all_blogs[0];
 
     await api
       .put(`/blogs/api/${first_blog.id}`)
       .send({ likes: 99 })
       .expect(200);
 
-    const altered_blog_list = await Blog.find({});
-    const altered_blog_list_toJSON = altered_blog_list.map((blog) =>
-      blog.toJSON()
-    );
-    const altered_first_blog = altered_blog_list_toJSON[0];
+    const altered_blog_list = await get_all_from_model(Blog);
+    const altered_first_blog = altered_blog_list[0];
     expect(altered_first_blog.likes).toEqual(99);
   });
 });
@@ -122,19 +113,19 @@ describe('total_likes()', () => {
     }
   ];
 
-  test('equals the "likes" property data of its one blog listing', () => {
+  test('equals the "likes" property data of its one blog post', () => {
     const result = total_likes(one_article_blog_list);
     expect(result).toBe(5);
   });
 
-  test('equals the total number of likes in each blog listing', () => {
+  test('equals the total number of likes in each blog post', () => {
     const result = total_likes(init_blog_list);
     expect(result).toBe(36);
   });
 });
 
 describe('favorite_blog()', () => {
-  test('returns the top blog listing according to likes', () => {
+  test('returns the top blog post according to likes', () => {
     const result = favorite_blog(init_blog_list);
     expect(result).toEqual({
       // Exclude _id and __v

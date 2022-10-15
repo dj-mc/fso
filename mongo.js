@@ -2,7 +2,7 @@ require('dotenv').config();
 const mongoose = require('mongoose');
 const { Note, new_note } = require('./models/Note');
 const { Contact, new_contact } = require('./models/Contact');
-const { Blog, new_blog_listing } = require('./models/Blog');
+const { Blog, new_blog_post } = require('./models/Blog');
 
 // CLI to mongodb
 // node mongo.js notes <data>
@@ -50,10 +50,10 @@ switch (db) {
     break;
 
   case 'blog':
-    new_blog_listing(json_data).save();
+    new_blog_post(json_data).save();
     Blog.find({}).then((result) => {
-      result.forEach((listing) => {
-        console.log(listing);
+      result.forEach((post) => {
+        console.log(post);
       });
       mongoose.connection.close();
     });

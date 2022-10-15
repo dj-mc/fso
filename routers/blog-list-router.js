@@ -1,5 +1,5 @@
 const express = require('express');
-const { Blog, new_blog_listing } = require('../models/Blog');
+const { Blog, new_blog_post } = require('../models/Blog');
 
 const BlogRouter = express.Router();
 
@@ -14,8 +14,8 @@ BlogRouter.get('/api', async (req, res) => {
 
 BlogRouter.post('/api', async (req, res, next) => {
   try {
-    const saved_blog_listing = await new_blog_listing(req.body).save();
-    res.status(201).json(saved_blog_listing);
+    const saved_blog_post = await new_blog_post(req.body).save();
+    res.status(201).json(saved_blog_post);
   } catch (exception) {
     next(exception);
   }

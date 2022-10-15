@@ -1,7 +1,7 @@
 const total_likes = (blog_list_array) => {
   if (blog_list_array.length === 0) return 0;
-  return blog_list_array.reduce((sum, current_listing) => {
-    return sum + current_listing.likes;
+  return blog_list_array.reduce((sum, current_post) => {
+    return sum + current_post.likes;
   }, 0);
 };
 

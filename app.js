@@ -16,9 +16,9 @@ const cors = require('cors');
 
 mongoose
   .connect(config.MONGODB_URI)
-  .then((_) => {
-    console.log(`Connected to ${config.MONGODB_URI}`);
-  })
+  // .then((_) => {
+  //   // console.log(`Connected to ${config.MONGODB_URI}`);
+  // })
   .catch((error) => {
     console.log(error.message);
   });

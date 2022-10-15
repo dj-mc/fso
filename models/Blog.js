@@ -42,7 +42,7 @@ blog_schema.set('toObject', {
 
 const Blog = mongoose.model('Blog', blog_schema);
 
-const new_blog_listing = (req_body) => {
+const new_blog_post = (req_body) => {
   return new Blog({
     title: req_body.title,
     author: req_body.author,
@@ -51,4 +51,4 @@ const new_blog_listing = (req_body) => {
   });
 };
 
-module.exports = { Blog, new_blog_listing };
+module.exports = { Blog, new_blog_post };

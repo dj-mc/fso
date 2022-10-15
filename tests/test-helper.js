@@ -5,6 +5,11 @@ const get_all_notes = async () => {
   return notes.map((note) => note.toJSON());
 };
 
+const get_all_from_model = async (model) => {
+  const all_data = await model.find({});
+  return all_data.map((data) => data.toJSON());
+};
+
 const non_existent_id = async () => {
   const note = new Note({ content: 'asdfghjkl;', date: new Date() });
   await note.save();
@@ -14,5 +19,6 @@ const non_existent_id = async () => {
 
 module.exports = {
   get_all_notes,
+  get_all_from_model,
   non_existent_id
 };
