@@ -14,7 +14,11 @@ UsersRouter.get('/', (req, res) => {
 });
 
 UsersRouter.get('/api', async (req, res) => {
-  const all_users = await User.find({});
+  // see ref: 'Note' in ../models/User.js
+  const all_users = await User.find({}).populate('notes', {
+    content: 1,
+    date: 1
+  });
   res.json(all_users);
 });
 

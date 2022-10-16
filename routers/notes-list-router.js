@@ -9,7 +9,11 @@ NotesRouter.get('/', (req, res) => {
 });
 
 NotesRouter.get('/api', async (req, res) => {
-  const all_notes = await Note.find({});
+  // see ref: 'User' in ../models/Note.js
+  const all_notes = await Note.find({}).populate('user', {
+    username: 1,
+    name: 1
+  });
   res.json(all_notes);
 });
 
