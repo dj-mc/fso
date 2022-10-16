@@ -1,5 +1,6 @@
 const express = require('express');
 const { Note, new_note } = require('../models/Note');
+const { User } = require('../models/User');
 
 const NotesRouter = express.Router();
 
@@ -43,7 +44,16 @@ NotesRouter.post('/api', async (req, res, next) => {
   }
 
   try {
-    const saved_note = await new_note(req_body).save();
+    // user_id is provided in the request object
+    const target_user = await User.findById(req_body.user_id);
+
+    const saved_note = await new_note({
+      content: req_body.content,
+      user: target_user.id
+    }).save();
+
+    target_user.notes = target_user.notes.concat(saved_note.id);
+    await target_user.save();
     res.status(201).json(saved_note);
   } catch (exception) {
     next(exception);

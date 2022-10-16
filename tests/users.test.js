@@ -8,7 +8,7 @@ const {
   test
 } = require('@jest/globals');
 const supertest = require('supertest');
-const User = require('../models/User');
+const { User } = require('../models/User');
 const { get_all_from_model } = require('../tests/test-helper');
 
 const app = require('../app');

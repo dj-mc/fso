@@ -36,7 +36,8 @@ const new_note = (req_body) => {
   return new Note({
     content: req_body.content,
     date: new Date(),
-    important: req_body.important || false
+    important: req_body.important || false,
+    user: req_body.user
   });
 };
 

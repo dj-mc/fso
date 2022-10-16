@@ -34,4 +34,12 @@ user_schema.set('toObject', {
 
 const User = mongoose.model('User', user_schema);
 
-module.exports = User;
+const new_user = (req_body) => {
+  return new User({
+    username: req_body.username,
+    name: req_body.name,
+    password_hash: req_body.password_hash
+  });
+};
+
+module.exports = { User, new_user };
