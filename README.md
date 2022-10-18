@@ -25,3 +25,15 @@ dev deps last I tried. I would like to remove this package if possible.
 
 FullStackOpen wants me to install `cross-env` and `express-async-errors`, but
 this project omits their usage due to a lack of maintenance/interest.
+
+## auth via tokens
+
+- user logs in via frontend form.
+- form sends username/password to /login/api via HTTP POST request.
+- if auth is correct: server generates token identifying logged in user.
+- token is digitally signed.
+- server responds with successful status code and returns token.
+- browser saves token.
+- user creates new note.
+- browser sends token to server with request.
+- server uses token to identify user.

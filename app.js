@@ -64,7 +64,8 @@ app
   .use('/blogs', require('./routers/blog-list-router').app)
   .use('/notes', require('./routers/notes-list-router').app)
   .use('/phonebook', require('./routers/phonebook-router').app)
-  .use('/users', require('./routers/users-router').app);
+  .use('/users', require('./routers/users-router').app)
+  .use('/login', require('./routers/auth-router').app);
 
 app.use(unknown_route);
 app.use(error_handler);
