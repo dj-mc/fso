@@ -26,7 +26,13 @@ AuthRouter.post('/api', async (req, res, next) => {
       id: target_user.id
     };
 
-    const token = jwt.sign(user_for_token, process.env.SECRET);
+    // Alt solution: implement server-side sessions via
+    // database and/or redis to check each api requests'
+    // token validity for access rights.
+
+    const token = jwt.sign(user_for_token, process.env.SECRET, {
+      expiresIn: 60 * 60
+    });
 
     res.status(200).send({
       token,

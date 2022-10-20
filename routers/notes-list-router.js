@@ -1,8 +1,17 @@
 const express = require('express');
+const jwt = require('jsonwebtoken');
 const { Note, new_note } = require('../models/Note');
 const { User } = require('../models/User');
 
 const NotesRouter = express.Router();
+
+const get_token_from = (req) => {
+  const auth = req.get('authorization');
+  if (auth && auth.toLowerCase().startsWith('bearer')) {
+    return auth.substring(7);
+  }
+  return null;
+};
 
 NotesRouter.get('/', (req, res) => {
   res.send(`<h1>Notes Homepage</h1>`);
@@ -43,13 +52,22 @@ NotesRouter.delete('/api/:id', async (req, res, next) => {
 
 NotesRouter.post('/api', async (req, res, next) => {
   const req_body = req.body;
+  // const { content, user_id } = req.body;
+  const req_token = get_token_from(req);
+  const decoded_token = jwt.verify(req_token, process.env.SECRET);
+
+  if (!decoded_token.id) {
+    return res.status(401).json({ error: 'Missing or invalid token' });
+  }
+
   if (!req_body.content) {
     return res.status(400).json({ error: 'Content not found' });
   }
 
   try {
     // user_id is provided in the request object
-    const target_user = await User.findById(req_body.user_id);
+    // const target_user = await User.findById(req_body.user_id);
+    const target_user = await User.findById(decoded_token.id);
 
     const saved_note = await new_note({
       content: req_body.content,
