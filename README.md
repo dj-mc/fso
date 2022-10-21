@@ -14,19 +14,7 @@ react's jsx sugar, instead of using [CRA](https://create-react-app.dev/),
 webpack, babel, etc. to compile it. I wanted to learn typescript but the course
 doesn't cover it until much later, and so I've used esbuild to compile that too.
 
-## notes to self
-
-`heroku login`  
-`heroku config:set MONGODB_URI=<uri>`  
-`git push heroku HEAD:master`
-
-`dotenv` is installed as a normal dependency because heroku was not installing
-dev deps last I tried. I would like to remove this package if possible.
-
-FullStackOpen wants me to install `cross-env` and `express-async-errors`, but
-this project omits their usage due to a lack of maintenance/interest.
-
-## auth via tokens
+## Authorization with jwt tokens
 
 - user logs in via frontend form.
 - form sends username/password to /login/api via HTTP POST request.
@@ -37,3 +25,64 @@ this project omits their usage due to a lack of maintenance/interest.
 - user creates new note.
 - browser sends token to server with request.
 - server uses token to identify user.
+
+## Using the api with curl
+
+### Create a user
+
+```bash
+curl -X POST -H "Content-Type: application/json" \
+  -d '{"name": "dan", "username": "dj-mc", "password": "password123"}' \
+  http://127.0.0.1:9001/users/api
+```
+
+### Login with password  
+
+Returns a jwt token which the `Authorization: Bearer` header will need.
+
+```bash
+curl -X POST -H "Content-Type: application/json" \
+  -d '{"username": "dj-mc", "password": "password123"}' \
+  http://127.0.0.1:9001/login/api
+```
+
+### Post a new note with jwt token
+
+```bash
+curl -X POST -H "Content-Type: application/json" \
+  -H "Authorization: Bearer <token>" \
+  -d '{"content": "Buy beef, eggs, cheese, and milk", "username": "dj-mc"}' \
+  http://127.0.0.1:9001/notes/api
+```
+
+## using beforeEach/All
+
+```javascript
+    // If using forEach:
+    // Every iteration creates its own async function, so
+    // beforeEach cannot wait on forEach to finish executing.
+
+    // or:
+    const new_notes_mapped = init_notes_data.map((note) => new Note(note));
+    const new_notes_promises = new_notes_mapped.map((note) => note.save());
+    await Promise.all(new_notes_promises); // Fulfill promises (in parallel)
+
+    // or:
+    If order matters (not parallel):
+    for (let note of init_notes_data) {
+      let new_note = new Note(note);
+      await new_note.save();
+    }
+```
+
+## Other things
+
+`heroku login`  
+`heroku config:set MONGODB_URI=<uri>`  
+`git push heroku HEAD:master`
+
+`dotenv` is installed as a normal dependency because heroku was not installing
+dev deps last I tried. I would like to remove this package if possible.
+
+FullStackOpen wants me to install `cross-env` and `express-async-errors`, but
+this project omits their usage due to a lack of maintenance/interest.
