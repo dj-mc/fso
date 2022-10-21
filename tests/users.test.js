@@ -25,15 +25,15 @@ describe('If there is one user in database', () => {
   test('successfully create a new user', async () => {
     const all_users = await get_all_from_model(User);
 
-    const new_user_data = {
-      username: 'mluukkai',
-      name: 'Matti Luukkainen',
-      password: 'salainen'
+    const new_user = {
+      username: 'jsmith',
+      name: 'Jane Smith',
+      password: 'foobar123'
     };
 
     await api
       .post('/users/api')
-      .send(new_user_data)
+      .send(new_user)
       .expect(201)
       .expect('Content-Type', /application\/json/);
 
@@ -41,13 +41,13 @@ describe('If there is one user in database', () => {
     expect(altered_users).toHaveLength(all_users.length + 1);
 
     const usernames = altered_users.map((user) => user.username);
-    expect(usernames).toContain(new_user_data.username);
+    expect(usernames).toContain(new_user.username);
   });
 
   test('fail to create a new user whose username is already taken', async () => {
     const all_users = await get_all_from_model(User);
 
-    const new_user_data = {
+    const new_user = {
       username: 'root',
       name: 'imposter superuser',
       password: 'password123'
@@ -55,7 +55,7 @@ describe('If there is one user in database', () => {
 
     const result = await api
       .post('/users/api')
-      .send(new_user_data)
+      .send(new_user)
       .expect(400)
       .expect('Content-Type', /application\/json/);
     expect(result.body.error).toContain('This username is already taken');
