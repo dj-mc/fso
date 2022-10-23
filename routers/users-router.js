@@ -15,15 +15,27 @@ UsersRouter.get('/', (req, res) => {
 
 UsersRouter.get('/api', async (req, res) => {
   // see ref: 'Note' in ../models/User.js
-  const all_users = await User.find({}).populate('notes', {
-    content: 1,
-    date: 1
-  });
+  const all_users = await User.find({})
+    .populate('notes', {
+      content: 1,
+      date: 1
+    })
+    .populate('blogs', {
+      title: 1,
+      author: 1,
+      url: 1
+    });
   res.json(all_users);
 });
 
 UsersRouter.post('/api', async (req, res, next) => {
   const { username, name, password } = req.body;
+
+  if (password.length < 9) {
+    return res.status(400).json({
+      error: 'Password requires at least 9 characters'
+    });
+  }
 
   try {
     const existing_user = await User.findOne({ username });

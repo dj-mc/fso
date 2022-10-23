@@ -1,14 +1,8 @@
 const mongoose = require('mongoose');
 
 const blog_schema = new mongoose.Schema({
-  title: {
-    type: String,
-    required: true
-  },
-  author: {
-    type: String,
-    required: true
-  },
+  title: { type: String, required: true },
+  author: { type: String, required: true },
   url: {
     type: String,
     required: true,
@@ -18,9 +12,10 @@ const blog_schema = new mongoose.Schema({
       }
     }
   },
-  likes: {
-    type: Number,
-    required: true
+  likes: { type: Number, required: true },
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
   }
 });
 
@@ -47,7 +42,8 @@ const new_blog_post = (req_body) => {
     title: req_body.title,
     author: req_body.author,
     url: req_body.url,
-    likes: req_body.likes || 0
+    likes: req_body.likes || 0,
+    user: req_body.user
   });
 };
 
