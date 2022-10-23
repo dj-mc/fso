@@ -1,22 +1,24 @@
+const bcrypt = require('bcrypt');
 const mongoose = require('mongoose');
 const {
   afterAll,
-  beforeEach,
+  beforeAll,
   describe,
   expect,
   test
 } = require('@jest/globals');
 const supertest = require('supertest');
 const { Blog } = require('../models/Blog');
-const { total_likes, favorite_blog } = require('../utils/blog-list-helper');
-const init_blog_list = require('../test-data/blog-list.json').blogs;
+const { User } = require('../models/User');
 const { get_all_from_model } = require('../tests/test-helper');
+const init_blog_list = require('../test-data/blog-list.json').blogs;
+const { total_likes, favorite_blog } = require('../utils/blog-list-helper');
 
 const app = require('../app');
 const api = supertest(app);
 
-describe('/blogs/api', () => {
-  beforeEach(async () => {
+describe('get /blogs/api', () => {
+  beforeAll(async () => {
     await Blog.deleteMany({});
     for (let blog of init_blog_list) {
       let new_blog = new Blog(blog);
@@ -35,47 +37,90 @@ describe('/blogs/api', () => {
       expect(blog.id).toBeDefined();
     }
   });
+});
+
+describe('post /blogs/api', () => {
+  let token;
+
+  beforeAll(async () => {
+    await Blog.deleteMany({});
+    await User.deleteMany({});
+
+    // Create a new user
+    const password_hash = await bcrypt.hash('qwerty121', 10);
+    const new_user = new User({
+      username: 'rrob',
+      name: 'Robert Robertson',
+      password_hash
+    });
+
+    await new_user.save();
+  });
 
   test('posts a valid blog post to database', async () => {
+    // Login with previously defined new_user
+    const login_response = await api
+      .post('/login/api')
+      .send({ username: 'rrob', password: 'qwerty121' })
+      .expect(200)
+      .expect('Content-Type', /application\/json/);
+
+    token = login_response.body.token;
+
     const new_blog = {
       title: 'title of blog post',
       author: 'author of blog post',
       url: 'https://url.123/blog',
-      likes: 3
+      likes: 3,
+      username: 'rrob'
     };
 
     await api
       .post('/blogs/api')
+      .set('Authorization', 'Bearer ' + token)
       .send(new_blog)
       .expect(201)
       .expect('Content-Type', /application\/json/);
 
     const all_blogs = await get_all_from_model(Blog);
-    expect(all_blogs).toHaveLength(init_blog_list.length + 1);
+    expect(all_blogs).toHaveLength(1); // First blog posted
   });
 
   test('posts a blog post with no likes property to database', async () => {
     const new_blog = {
       title: 'Programming Programs',
       author: 'Programmer',
-      url: 'https://foo.369/vlog'
+      url: 'https://foo.369/vlog',
+      username: 'rrob'
     };
 
     await api
       .post('/blogs/api')
+      .set('Authorization', 'Bearer ' + token)
       .send(new_blog)
       .expect(201)
       .expect('Content-Type', /application\/json/);
 
     const all_blogs = await get_all_from_model(Blog);
-    expect(all_blogs).toHaveLength(init_blog_list.length + 1);
+    expect(all_blogs).toHaveLength(2); // Second blog posted
   });
 
   test('returns status code 400 if new_blog has no title or url', async () => {
-    const new_blog = { author: 'John Doe', likes: 999 };
-    await api.post('/blogs/api').send(new_blog).expect(400);
-  });
+    const new_blog = {
+      author: 'John Doe',
+      likes: 999,
+      username: 'rrob'
+    };
 
+    await api
+      .post('/blogs/api')
+      .set('Authorization', 'Bearer ' + token)
+      .send(new_blog)
+      .expect(400);
+  });
+});
+
+describe('delete /blogs/api', () => {
   test('returns status code 204 after deleting a blog post', async () => {
     const all_blogs = await get_all_from_model(Blog);
     const first_blog = all_blogs[0];
@@ -83,9 +128,11 @@ describe('/blogs/api', () => {
     await api.delete(`/blogs/api/${first_blog.id}`).expect(204);
 
     const altered_blog_list = await get_all_from_model(Blog);
-    expect(altered_blog_list).toHaveLength(init_blog_list.length - 1);
+    expect(altered_blog_list).toHaveLength(all_blogs.length - 1);
   });
+});
 
+describe('update /blogs/api', () => {
   test('return status code 200 after updating a blog post', async () => {
     const all_blogs = await get_all_from_model(Blog);
     const first_blog = all_blogs[0];
