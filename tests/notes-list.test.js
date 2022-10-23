@@ -10,7 +10,7 @@ const {
 const supertest = require('supertest');
 const { Note } = require('../models/Note');
 const { User } = require('../models/User');
-const { get_all_notes } = require('./test-helper');
+const { get_all_from_model } = require('./test-helper');
 const { init_notes_data } = require('../test-data/notes-list-data.js');
 
 // npm run test -- -t "notes"
@@ -54,7 +54,7 @@ describe('get /notes/api', () => {
   });
 
   test('returns a specific note via its ID', async () => {
-    const all_notes = await get_all_notes();
+    const all_notes = await get_all_from_model(Note);
     const first_note = all_notes[0];
     const found_first_note = await api
       .get(`/notes/api/${first_note.id}`)
@@ -106,7 +106,7 @@ describe('post /notes/api', () => {
       .expect(201)
       .expect('Content-Type', /application\/json/);
 
-    const all_notes = await get_all_notes();
+    const all_notes = await get_all_from_model(Note);
     expect(all_notes).toHaveLength(1);
 
     const all_content = all_notes.map((r) => r.content);
@@ -127,7 +127,7 @@ describe('post /notes/api', () => {
       .send(new_note)
       .expect(400);
 
-    const all_notes = await get_all_notes();
+    const all_notes = await get_all_from_model(Note);
     expect(all_notes).toHaveLength(1);
   });
 });
@@ -139,11 +139,11 @@ describe('delete /notes/api', () => {
   });
 
   test('returns status 204 after deleting a note', async () => {
-    const all_notes = await get_all_notes();
+    const all_notes = await get_all_from_model(Note);
     const first_note = all_notes[0];
     await api.delete(`/notes/api/${first_note.id}`).expect(204);
 
-    const altered_notes = await get_all_notes();
+    const altered_notes = await get_all_from_model(Note);
     expect(altered_notes).toHaveLength(all_notes.length - 1);
 
     const altered_contents = altered_notes.map((r) => r.content);
