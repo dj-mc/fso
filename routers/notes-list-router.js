@@ -5,14 +5,6 @@ const { User } = require('../models/User');
 
 const NotesRouter = express.Router();
 
-const get_token_from = (req) => {
-  const auth = req.get('authorization');
-  if (auth && auth.toLowerCase().startsWith('bearer')) {
-    return auth.substring(7);
-  }
-  return null;
-};
-
 NotesRouter.get('/', (req, res) => {
   res.send(`<h1>Notes Homepage</h1>`);
 });
@@ -33,18 +25,8 @@ NotesRouter.get('/api/:id', async (req, res, next) => {
     if (target_note) {
       res.json(target_note);
     } else {
-      res.status(400).send(`Couldn't find contact with id: ${target_id}`);
+      res.status(400).send(`Couldn't find note with id: ${target_id}`);
     }
-  } catch (exception) {
-    next(exception);
-  }
-});
-
-NotesRouter.delete('/api/:id', async (req, res, next) => {
-  const target_id = req.params.id;
-  try {
-    await Note.findByIdAndDelete(target_id);
-    res.status(204).end();
   } catch (exception) {
     next(exception);
   }
@@ -52,8 +34,7 @@ NotesRouter.delete('/api/:id', async (req, res, next) => {
 
 NotesRouter.post('/api', async (req, res, next) => {
   const req_body = req.body;
-  // const { content, user_id } = req.body;
-  const req_token = get_token_from(req);
+  const req_token = req.token;
   const decoded_token = jwt.verify(req_token, process.env.SECRET);
 
   if (!decoded_token.id) {
@@ -65,8 +46,6 @@ NotesRouter.post('/api', async (req, res, next) => {
   }
 
   try {
-    // user_id is provided in the request object
-    // const target_user = await User.findById(req_body.user_id);
     const target_user = await User.findById(decoded_token.id);
 
     const saved_note = await new_note({
@@ -76,7 +55,18 @@ NotesRouter.post('/api', async (req, res, next) => {
 
     target_user.notes = target_user.notes.concat(saved_note.id);
     await target_user.save();
+
     res.status(201).json(saved_note);
+  } catch (exception) {
+    next(exception);
+  }
+});
+
+NotesRouter.delete('/api/:id', async (req, res, next) => {
+  const target_id = req.params.id;
+  try {
+    await Note.findByIdAndDelete(target_id);
+    res.status(204).end();
   } catch (exception) {
     next(exception);
   }

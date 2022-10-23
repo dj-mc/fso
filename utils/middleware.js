@@ -11,6 +11,14 @@ const unknown_route = (_, response) => {
   response.status(404).send({ error: 'Requested route not found' });
 };
 
+const get_token_from = (request, _, next) => {
+  const auth = request.get('authorization');
+  if (auth && auth.toLowerCase().startsWith('bearer')) {
+    request.token = auth.substring(7);
+  }
+  next();
+};
+
 const error_handler = (error, _, response, next) => {
   if (error.name === 'CastError') {
     return response.status(400).send({ error: 'Malformed id' });
@@ -33,5 +41,6 @@ const error_handler = (error, _, response, next) => {
 module.exports = {
   request_logger,
   unknown_route,
+  get_token_from,
   error_handler
 };

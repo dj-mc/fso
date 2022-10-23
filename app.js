@@ -10,18 +10,14 @@ const mongoose = require('mongoose');
 const {
   request_logger,
   unknown_route,
+  get_token_from,
   error_handler
 } = require('./utils/middleware');
 const cors = require('cors');
 
-mongoose
-  .connect(config.MONGODB_URI)
-  // .then((_) => {
-  //   // console.log(`Connected to ${config.MONGODB_URI}`);
-  // })
-  .catch((error) => {
-    console.log(error.message);
-  });
+mongoose.connect(config.MONGODB_URI).catch((error) => {
+  console.log(error.message);
+});
 
 const app = express();
 
@@ -59,6 +55,8 @@ app.use(
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html');
 });
+
+app.use(get_token_from);
 
 app
   .use('/blogs', require('./routers/blog-list-router').app)
