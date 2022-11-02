@@ -48,10 +48,26 @@ BlogRouter.post('/api', async (req, res, next) => {
 });
 
 BlogRouter.delete('/api/:id', async (req, res, next) => {
+  const req_token = req.token;
+  const decoded_token = jwt.verify(req_token, process.env.SECRET);
+
+  if (!decoded_token.id) {
+    return res.status(401).json({ error: 'Missing or invalid token' });
+  }
+
   const target_id = req.params.id;
+
   try {
-    await Blog.findByIdAndDelete(target_id);
-    res.status(204).end();
+    const target_blog = await Blog.findById(target_id);
+    const target_user = await User.findById(decoded_token.id);
+    if (target_blog.user.toString() === target_user.id.toString()) {
+      await Blog.findByIdAndDelete(target_id);
+      res.status(204).end();
+    } else {
+      return res.status(403).json({
+        error: 'User does not have permission to delete this blog post'
+      });
+    }
   } catch (exception) {
     next(exception);
   }

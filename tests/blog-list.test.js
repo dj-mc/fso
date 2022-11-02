@@ -20,8 +20,8 @@ const api = supertest(app);
 describe('get /blogs/api', () => {
   beforeAll(async () => {
     await Blog.deleteMany({});
-    for (let blog of init_blog_list) {
-      let new_blog = new Blog(blog);
+    for (const blog of init_blog_list) {
+      const new_blog = new Blog(blog);
       await new_blog.save();
     }
   });
@@ -33,15 +33,15 @@ describe('get /blogs/api', () => {
 
   test('returns blog posts, each containing a unique id property', async () => {
     const response = await api.get('/blogs/api');
-    for (let blog of response.body) {
+    for (const blog of response.body) {
       expect(blog.id).toBeDefined();
     }
   });
 });
 
-describe('post /blogs/api', () => {
-  let token;
+let token; // The rest of the tests focus on user rrob and his posts
 
+describe('post /blogs/api', () => {
   beforeAll(async () => {
     await Blog.deleteMany({});
     await User.deleteMany({});
@@ -125,7 +125,10 @@ describe('delete /blogs/api', () => {
     const all_blogs = await get_all_from_model(Blog);
     const first_blog = all_blogs[0];
 
-    await api.delete(`/blogs/api/${first_blog.id}`).expect(204);
+    await api
+      .delete(`/blogs/api/${first_blog.id}`)
+      .set('Authorization', 'Bearer ' + token)
+      .expect(204);
 
     const altered_blog_list = await get_all_from_model(Blog);
     expect(altered_blog_list).toHaveLength(all_blogs.length - 1);
