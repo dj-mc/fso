@@ -3,9 +3,11 @@
 <https://fullstackopen.com/en/about/>  
 FullStackOpen is a web development course organized by University of Helsinki.
 
-Parts 0, 1, and 2 focused on the frontend, which I keep in [this](https://github.com/dj-mc/esb-r) repo.
+Parts 0, 1, and 2 focused on the frontend, which I keep [here](https://github.com/dj-mc/esb-r).
 
-I've finished part 3 and I'm currently working on part 4, which I keep here.
+This repo (currently) contains the exercises I completed from parts 3 and 4.
+Part 5 is (mostly) frontend material, which further builds on previous parts.
+
 As I complete the course exercises I also take creative liberties in how the
 project is written/organized, with its intended functionality intact.
 
@@ -13,6 +15,7 @@ For example: during parts 0-2 I configured esbuild + typescript to render
 react's jsx sugar, instead of using [CRA](https://create-react-app.dev/),
 webpack, babel, etc. to compile it. I wanted to learn typescript but the course
 doesn't cover it until much later, and so I've used esbuild to compile that too.
+Tools like webpack and typescript will be covered later.
 
 ## Authorization with jwt tokens
 
@@ -46,6 +49,8 @@ curl -X POST -H "Content-Type: application/json" \
   http://127.0.0.1:9001/login/api
 ```
 
+The above command should return a `<token>` to be used below:
+
 ### Post a new note with jwt token
 
 ```bash
@@ -55,24 +60,28 @@ curl -X POST -H "Content-Type: application/json" \
   http://127.0.0.1:9001/notes/api
 ```
 
-## using beforeEach/All
+## Using beforeEach/beforeAll
 
 ```javascript
     // If using forEach:
     // Every iteration creates its own async function, so
     // beforeEach cannot wait on forEach to finish executing.
 
-    // or:
+    // Use map instead:
     const new_notes_mapped = init_notes_data.map((note) => new Note(note));
     const new_notes_promises = new_notes_mapped.map((note) => note.save());
     await Promise.all(new_notes_promises); // Fulfill promises (in parallel)
 
-    // or:
-    If order matters (not parallel):
-    for (let note of init_notes_data) {
-      let new_note = new Note(note);
+    // Or use a regular for loop
+    // if order matters (not parallel):
+    for (const note of init_notes_data) {
+      const new_note = new Note(note);
       await new_note.save();
     }
+
+    // For your convenience:
+    await Note.deleteMany({});
+    await Note.insertMany(init_notes_data);
 ```
 
 ## Other things
