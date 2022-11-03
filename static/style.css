@@ -2,19 +2,6 @@ body {
   background-color: skyblue;
 }
 
-button.square {
-  width: 25px;
-  height: 25px;
-  margin: 2px;
-  padding: 0;
-  border: none;
-}
-
-.board-row {
-  display: flex;
-  align-items: center;
-}
-
 #like-btn {
   margin: 2px;
   padding: 5px;

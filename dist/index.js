@@ -22440,7 +22440,7 @@
               unmarkContainerAsRoot(container);
             }
           };
-          function createRoot2(container, options2) {
+          function createRoot(container, options2) {
             if (!isValidContainer(container)) {
               throw new Error("createRoot(...): Target container is not a DOM element.");
             }
@@ -22799,7 +22799,7 @@
                 error('You are importing createRoot from "react-dom" which is not supported. You should instead import it from "react-dom/client".');
               }
             }
-            return createRoot2(container, options2);
+            return createRoot(container, options2);
           }
           function hydrateRoot$1(container, initialChildren, options2) {
             {
@@ -24379,7 +24379,7 @@
 
   // src/index.tsx
   var import_react6 = __toESM(require_react(), 1);
-  var ReactDOMClient = __toESM(require_client(), 1);
+  var import_client = __toESM(require_client(), 1);
 
   // src/app.tsx
   var import_react5 = __toESM(require_react(), 1);
@@ -24418,7 +24418,7 @@
     return response.data;
   };
 
-  // src/utils/notification.tsx
+  // src/components/notification.tsx
   var import_react2 = __toESM(require_react(), 1);
   var Notification = (props) => {
     if (props.message === null) {
@@ -24447,7 +24447,11 @@
 
   // src/notes/note-form.tsx
   var import_react4 = __toESM(require_react(), 1);
-  var NoteForm = ({ new_note, add_note, note_input_change }) => {
+  var NoteForm = ({
+    new_note,
+    add_note,
+    note_input_change
+  }) => {
     return /* @__PURE__ */ import_react4.default.createElement("form", {
       onSubmit: add_note
     }, /* @__PURE__ */ import_react4.default.createElement("input", {
@@ -24508,6 +24512,14 @@
       });
     };
     (0, import_react5.useEffect)(get_notes_data, []);
+    (0, import_react5.useEffect)(() => {
+      const logged_in_user_JSON = window.localStorage.getItem("logged_in_user");
+      if (logged_in_user_JSON) {
+        const parsed_user = JSON.parse(logged_in_user_JSON);
+        set_user(parsed_user);
+        note_service.set_token(parsed_user.token);
+      }
+    }, []);
     const handle_login = async (e) => {
       e.preventDefault();
       console.log(`Logging in as ${username}`);
@@ -24516,6 +24528,10 @@
           username,
           password
         });
+        window.localStorage.setItem(
+          "logged_in_user",
+          JSON.stringify(logged_in_user)
+        );
         note_service.set_token(logged_in_user.token);
         set_user(logged_in_user);
         set_username("");
@@ -24527,6 +24543,10 @@
           set_notification("");
         }, 5e3);
       }
+    };
+    const logout = () => {
+      window.localStorage.removeItem("logged_in_user");
+      set_user(null);
     };
     const add_note = (e) => {
       e.preventDefault();
@@ -24594,13 +24614,15 @@
       handle_login,
       handle_username_input: ({ target }) => set_username(target.value),
       handle_password_input: ({ target }) => set_password(target.value)
-    }) : /* @__PURE__ */ import_react5.default.createElement(import_react5.default.Fragment, null, /* @__PURE__ */ import_react5.default.createElement("p", null, "Logged in as ", user.name)), user !== null && /* @__PURE__ */ import_react5.default.createElement(NoteForm, {
+    }) : /* @__PURE__ */ import_react5.default.createElement(import_react5.default.Fragment, null, /* @__PURE__ */ import_react5.default.createElement("p", null, "Logged in as ", user.name)), user !== null && /* @__PURE__ */ import_react5.default.createElement(import_react5.default.Fragment, null, /* @__PURE__ */ import_react5.default.createElement("button", {
+      onClick: () => logout()
+    }, "Logout"), /* @__PURE__ */ import_react5.default.createElement(NoteForm, {
       new_note,
       add_note,
       note_input_change
-    }), /* @__PURE__ */ import_react5.default.createElement("button", {
+    })), /* @__PURE__ */ import_react5.default.createElement("button", {
       onClick: () => set_display_all(!display_all)
-    }, display_all ? "all" : "important"), /* @__PURE__ */ import_react5.default.createElement("ul", {
+    }, display_all ? "All notes" : "Important notes"), /* @__PURE__ */ import_react5.default.createElement("ul", {
       className: "note-list"
     }, display_these.map((note) => /* @__PURE__ */ import_react5.default.createElement(Note, {
       key: note.id,
@@ -24611,12 +24633,9 @@
   };
 
   // src/index.tsx
-  var refresh = () => {
-    ReactDOMClient.createRoot(
-      document.getElementById("root")
-    ).render(/* @__PURE__ */ import_react6.default.createElement(App, null));
-  };
-  refresh();
+  import_client.default.createRoot(document.getElementById("root")).render(
+    /* @__PURE__ */ import_react6.default.createElement(import_react6.default.StrictMode, null, /* @__PURE__ */ import_react6.default.createElement(App, null))
+  );
 })();
 /**
  * @license React
