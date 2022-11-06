@@ -25,7 +25,7 @@ mongoose
     console.log(`Connected to ${MONGODB_URI}`);
   })
   .catch((error) => {
-    console.log(error.message);
+    console.error(error.message);
   });
 
 switch (db) {

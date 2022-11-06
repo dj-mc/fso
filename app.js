@@ -16,7 +16,7 @@ const {
 const cors = require('cors');
 
 mongoose.connect(config.MONGODB_URI).catch((error) => {
-  console.log(error.message);
+  console.error(error.message);
 });
 
 const app = express();
@@ -60,7 +60,7 @@ app.use(get_token_from);
 
 app
   .use('/blogs', require('./routers/blog-list-router').app)
-  .use('/notes', require('./routers/notes-list-router').app)
+  .use('/notes', require('./routers/note-list-router').app)
   .use('/phonebook', require('./routers/phonebook-router').app)
   .use('/users', require('./routers/users-router').app)
   .use('/login', require('./routers/auth-router').app);

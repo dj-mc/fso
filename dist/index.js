@@ -24381,7 +24381,7 @@
   var import_react6 = __toESM(require_react(), 1);
   var import_client = __toESM(require_client(), 1);
 
-  // src/app.tsx
+  // src/pages/note-list-page.tsx
   var import_react5 = __toESM(require_react(), 1);
 
   // src/auth/login-form.tsx
@@ -24496,8 +24496,8 @@
     set_token
   };
 
-  // src/app.tsx
-  var App = () => {
+  // src/pages/note-list-page.tsx
+  var NoteList = () => {
     const [user, set_user] = (0, import_react5.useState)(null);
     const [username, set_username] = (0, import_react5.useState)("");
     const [password, set_password] = (0, import_react5.useState)("");
@@ -24634,7 +24634,7 @@
 
   // src/index.tsx
   import_client.default.createRoot(document.getElementById("root")).render(
-    /* @__PURE__ */ import_react6.default.createElement(import_react6.default.StrictMode, null, /* @__PURE__ */ import_react6.default.createElement(App, null))
+    /* @__PURE__ */ import_react6.default.createElement(import_react6.default.StrictMode, null, /* @__PURE__ */ import_react6.default.createElement(NoteList, null))
   );
 })();
 /**

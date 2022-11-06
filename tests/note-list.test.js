@@ -11,7 +11,7 @@ const supertest = require('supertest');
 const { Note } = require('../models/Note');
 const { User } = require('../models/User');
 const { get_all_from_model } = require('./test-helper');
-const { init_notes_data } = require('../test-data/notes-list-data.js');
+const { init_notes_data } = require('../test-data/note-list-data.js');
 
 // npm run test -- -t "notes"
 
