@@ -24429,7 +24429,7 @@
     }, props.message);
   };
 
-  // src/notes/note.tsx
+  // src/note-list/note.tsx
   var import_react3 = __toESM(require_react(), 1);
   var Note = ({
     note,
@@ -24445,7 +24445,7 @@
     }, "remove"));
   };
 
-  // src/notes/note-form.tsx
+  // src/note-list/note-form.tsx
   var import_react4 = __toESM(require_react(), 1);
   var NoteForm = ({
     new_note,
