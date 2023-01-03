@@ -12,6 +12,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+
   color: white;
   background: black;
   width: fit-content;
@@ -33,4 +34,43 @@ h1 {
   border-radius: 1px;
   font-size: 13px;
   text-align: center;
+}
+
+.notification {
+  margin: 5px 0;
+}
+
+.login-form,
+.register-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: left;
+
+  width: 400px;
+  margin: auto;
+}
+
+.login-form > p,
+.register-form > p {
+  margin: 0;
+
+  text-align: left;
+  font-size: smaller;
+}
+
+.login-form > input,
+.register-form > input {
+  height: 30px;
+  margin: 3px 0 10px 0;
+}
+
+.login-form > button,
+.register-form > button {
+  width: 90px;
+  height: 30px;
+  margin: auto;
+
+  font-size: smaller;
+  border: none;
 }

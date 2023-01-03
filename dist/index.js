@@ -1001,7 +1001,7 @@
             }
             return dispatcher.useContext(Context);
           }
-          function useState2(initialState) {
+          function useState3(initialState) {
             var dispatcher = resolveDispatcher();
             return dispatcher.useState(initialState);
           }
@@ -1013,7 +1013,7 @@
             var dispatcher = resolveDispatcher();
             return dispatcher.useRef(initialValue);
           }
-          function useEffect2(create, deps) {
+          function useEffect3(create, deps) {
             var dispatcher = resolveDispatcher();
             return dispatcher.useEffect(create, deps);
           }
@@ -1793,7 +1793,7 @@
           exports.useContext = useContext;
           exports.useDebugValue = useDebugValue;
           exports.useDeferredValue = useDeferredValue;
-          exports.useEffect = useEffect2;
+          exports.useEffect = useEffect3;
           exports.useId = useId;
           exports.useImperativeHandle = useImperativeHandle;
           exports.useInsertionEffect = useInsertionEffect;
@@ -1801,7 +1801,7 @@
           exports.useMemo = useMemo;
           exports.useReducer = useReducer;
           exports.useRef = useRef;
-          exports.useState = useState2;
+          exports.useState = useState3;
           exports.useSyncExternalStore = useSyncExternalStore;
           exports.useTransition = useTransition;
           exports.version = ReactVersion;
@@ -2297,9 +2297,9 @@
           if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ !== "undefined" && typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart === "function") {
             __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(new Error());
           }
-          var React7 = require_react();
+          var React9 = require_react();
           var Scheduler = require_scheduler();
-          var ReactSharedInternals = React7.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
+          var ReactSharedInternals = React9.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
           var suppressWarning = false;
           function setSuppressWarning(newSuppressWarning) {
             {
@@ -3820,7 +3820,7 @@
             {
               if (props.value == null) {
                 if (typeof props.children === "object" && props.children !== null) {
-                  React7.Children.forEach(props.children, function(child) {
+                  React9.Children.forEach(props.children, function(child) {
                     if (child == null) {
                       return;
                     }
@@ -11981,7 +11981,7 @@
             }
           }
           var fakeInternalInstance = {};
-          var emptyRefsObject = new React7.Component().refs;
+          var emptyRefsObject = new React9.Component().refs;
           var didWarnAboutStateAssignmentForComponent;
           var didWarnAboutUninitializedState;
           var didWarnAboutGetSnapshotBeforeUpdateWithoutDidUpdate;
@@ -24378,11 +24378,11 @@
   });
 
   // src/index.tsx
-  var import_react6 = __toESM(require_react(), 1);
+  var import_react8 = __toESM(require_react(), 1);
   var import_client = __toESM(require_client(), 1);
 
-  // src/pages/note-list-page.tsx
-  var import_react5 = __toESM(require_react(), 1);
+  // src/pages/root-page.tsx
+  var import_react7 = __toESM(require_react(), 1);
 
   // src/auth/login-form.tsx
   var import_react = __toESM(require_react(), 1);
@@ -24394,77 +24394,61 @@
     handle_password_input
   }) => {
     return /* @__PURE__ */ import_react.default.createElement(import_react.default.Fragment, null, /* @__PURE__ */ import_react.default.createElement("form", {
-      onSubmit: handle_login
-    }, /* @__PURE__ */ import_react.default.createElement("div", null, "Username", /* @__PURE__ */ import_react.default.createElement("input", {
+      onSubmit: handle_login,
+      className: "login-form"
+    }, /* @__PURE__ */ import_react.default.createElement("p", null, "Username"), /* @__PURE__ */ import_react.default.createElement("input", {
       type: "text",
       value: username,
       name: "Username",
       onChange: handle_username_input
-    })), /* @__PURE__ */ import_react.default.createElement("div", null, "Password", /* @__PURE__ */ import_react.default.createElement("input", {
+    }), /* @__PURE__ */ import_react.default.createElement("p", null, "Password"), /* @__PURE__ */ import_react.default.createElement("input", {
       type: "password",
       value: password,
       name: "Password",
       onChange: handle_password_input
-    })), /* @__PURE__ */ import_react.default.createElement("button", {
+    }), /* @__PURE__ */ import_react.default.createElement("button", {
       type: "submit"
     }, "Login")));
   };
 
-  // src/services/login-service.ts
-  var import_axios = __toESM(require_axios2(), 1);
-  var base_url = "/login/api";
-  var login_response = async (credentials) => {
-    const response = await import_axios.default.post(base_url, credentials);
-    return response.data;
-  };
-
-  // src/components/notification.tsx
+  // src/auth/register-form.tsx
   var import_react2 = __toESM(require_react(), 1);
-  var Notification = (props) => {
-    if (props.message === null) {
-      return null;
-    }
-    return /* @__PURE__ */ import_react2.default.createElement("div", {
-      className: "notification"
-    }, props.message);
-  };
-
-  // src/note-list/note.tsx
-  var import_react3 = __toESM(require_react(), 1);
-  var Note = ({
-    note,
-    toggle_importance,
-    remove_note
+  var RegisterForm = ({
+    name,
+    username,
+    password,
+    handle_register,
+    handle_name_input,
+    handle_username_input,
+    handle_password_input
   }) => {
-    return /* @__PURE__ */ import_react3.default.createElement("li", {
-      className: "note-item"
-    }, note.content, /* @__PURE__ */ import_react3.default.createElement("button", {
-      onClick: toggle_importance
-    }, note.important ? "important" : "not important"), /* @__PURE__ */ import_react3.default.createElement("button", {
-      onClick: remove_note
-    }, "remove"));
-  };
-
-  // src/note-list/note-form.tsx
-  var import_react4 = __toESM(require_react(), 1);
-  var NoteForm = ({
-    new_note,
-    add_note,
-    note_input_change
-  }) => {
-    return /* @__PURE__ */ import_react4.default.createElement("form", {
-      onSubmit: add_note
-    }, /* @__PURE__ */ import_react4.default.createElement("input", {
-      value: new_note,
-      onChange: note_input_change
-    }), /* @__PURE__ */ import_react4.default.createElement("button", {
+    return /* @__PURE__ */ import_react2.default.createElement(import_react2.default.Fragment, null, /* @__PURE__ */ import_react2.default.createElement("form", {
+      onSubmit: handle_register,
+      className: "register-form"
+    }, /* @__PURE__ */ import_react2.default.createElement("p", null, "Name"), /* @__PURE__ */ import_react2.default.createElement("input", {
+      type: "text",
+      value: name,
+      name: "Name",
+      onChange: handle_name_input
+    }), /* @__PURE__ */ import_react2.default.createElement("p", null, "Username"), /* @__PURE__ */ import_react2.default.createElement("input", {
+      type: "text",
+      value: username,
+      name: "Username",
+      onChange: handle_username_input
+    }), /* @__PURE__ */ import_react2.default.createElement("p", null, "Password"), /* @__PURE__ */ import_react2.default.createElement("input", {
+      type: "password",
+      value: password,
+      name: "Password",
+      onChange: handle_password_input
+    }), /* @__PURE__ */ import_react2.default.createElement("button", {
       type: "submit"
-    }, "Save New Note"));
+    }, "Register")));
   };
 
-  // src/services/notes-service.ts
-  var import_axios2 = __toESM(require_axios2(), 1);
-  var notes_url = "/notes/api";
+  // src/services/auth-service.ts
+  var import_axios = __toESM(require_axios2(), 1);
+  var login_url = "/login/api";
+  var register_url = "/users/api";
   var token = "";
   var set_token = (new_token) => {
     token = `bearer ${new_token}`;
@@ -24472,12 +24456,82 @@
   var auth_config = (token2) => {
     return { headers: { Authorization: token2 } };
   };
+  var login_response = async (credentials) => {
+    const response = await import_axios.default.post(login_url, credentials);
+    return response.data;
+  };
+  var register_response = async (credentials) => {
+    const response = await import_axios.default.post(register_url, credentials);
+    return response.data;
+  };
+  var auth_service = {
+    set_token,
+    auth_config,
+    login_response,
+    register_response,
+    token
+  };
+
+  // src/components/notification.tsx
+  var import_react3 = __toESM(require_react(), 1);
+  var Notification = (props) => {
+    if (props.message === null) {
+      return null;
+    }
+    return /* @__PURE__ */ import_react3.default.createElement("div", {
+      className: "notification"
+    }, props.message);
+  };
+
+  // src/pages/note-list-page.tsx
+  var import_react6 = __toESM(require_react(), 1);
+
+  // src/note-list/note.tsx
+  var import_react4 = __toESM(require_react(), 1);
+  var Note = ({
+    note,
+    toggle_importance,
+    remove_note
+  }) => {
+    return /* @__PURE__ */ import_react4.default.createElement("li", {
+      className: "note-item"
+    }, note.content, /* @__PURE__ */ import_react4.default.createElement("button", {
+      onClick: toggle_importance
+    }, note.important ? "important" : "not important"), /* @__PURE__ */ import_react4.default.createElement("button", {
+      onClick: remove_note
+    }, "remove"));
+  };
+
+  // src/note-list/note-form.tsx
+  var import_react5 = __toESM(require_react(), 1);
+  var NoteForm = ({
+    new_note,
+    add_note,
+    note_input_change
+  }) => {
+    return /* @__PURE__ */ import_react5.default.createElement("form", {
+      onSubmit: add_note
+    }, /* @__PURE__ */ import_react5.default.createElement("input", {
+      value: new_note,
+      onChange: note_input_change
+    }), /* @__PURE__ */ import_react5.default.createElement("button", {
+      type: "submit"
+    }, "Save New Note"));
+  };
+
+  // src/services/note-service.ts
+  var import_axios2 = __toESM(require_axios2(), 1);
+  var notes_url = "/notes/api";
   var get_all_notes = async () => {
     const response = await import_axios2.default.get(notes_url);
     return response.data;
   };
   var create_note = async (new_note) => {
-    const response = await import_axios2.default.post(notes_url, new_note, auth_config(token));
+    const response = await import_axios2.default.post(
+      notes_url,
+      new_note,
+      auth_service.auth_config(auth_service.token)
+    );
     return response.data;
   };
   var update_note = async (id, updated_note) => {
@@ -24492,62 +24546,22 @@
     get_all: get_all_notes,
     create: create_note,
     update: update_note,
-    delete: delete_note,
-    set_token
+    delete: delete_note
   };
 
   // src/pages/note-list-page.tsx
   var NoteList = () => {
-    const [user, set_user] = (0, import_react5.useState)(null);
-    const [username, set_username] = (0, import_react5.useState)("");
-    const [password, set_password] = (0, import_react5.useState)("");
-    const [notification, set_notification] = (0, import_react5.useState)("");
     const init_notes = [];
-    const [notes_collection, set_notes_collection] = (0, import_react5.useState)(init_notes);
-    const [new_note, set_new_note] = (0, import_react5.useState)("");
-    const [display_all, set_display_all] = (0, import_react5.useState)(true);
+    const [notes_collection, set_notes_collection] = (0, import_react6.useState)(init_notes);
+    const [new_note, set_new_note] = (0, import_react6.useState)("");
+    const [display_all, set_display_all] = (0, import_react6.useState)(true);
+    const [notification, set_notification] = (0, import_react6.useState)("");
     const get_notes_data = () => {
       note_service.get_all().then((init_notes2) => {
         set_notes_collection(init_notes2);
       });
     };
-    (0, import_react5.useEffect)(get_notes_data, []);
-    (0, import_react5.useEffect)(() => {
-      const logged_in_user_JSON = window.localStorage.getItem("logged_in_user");
-      if (logged_in_user_JSON) {
-        const parsed_user = JSON.parse(logged_in_user_JSON);
-        set_user(parsed_user);
-        note_service.set_token(parsed_user.token);
-      }
-    }, []);
-    const handle_login = async (e) => {
-      e.preventDefault();
-      console.log(`Logging in as ${username}`);
-      try {
-        const logged_in_user = await login_response({
-          username,
-          password
-        });
-        window.localStorage.setItem(
-          "logged_in_user",
-          JSON.stringify(logged_in_user)
-        );
-        note_service.set_token(logged_in_user.token);
-        set_user(logged_in_user);
-        set_username("");
-        set_password("");
-      } catch (error) {
-        console.error(error);
-        set_notification("Invalid credentials");
-        setTimeout(() => {
-          set_notification("");
-        }, 5e3);
-      }
-    };
-    const logout = () => {
-      window.localStorage.removeItem("logged_in_user");
-      set_user(null);
-    };
+    (0, import_react6.useEffect)(get_notes_data, []);
     const add_note = (e) => {
       e.preventDefault();
       const new_note_obj = {
@@ -24606,35 +24620,118 @@
     const note_input_change = (e) => {
       set_new_note(e.target.value);
     };
-    return /* @__PURE__ */ import_react5.default.createElement(import_react5.default.Fragment, null, /* @__PURE__ */ import_react5.default.createElement(Notification, {
+    return /* @__PURE__ */ import_react6.default.createElement(import_react6.default.Fragment, null, /* @__PURE__ */ import_react6.default.createElement(Notification, {
       message: notification
-    }), user === null ? /* @__PURE__ */ import_react5.default.createElement(LoginForm, {
+    }), /* @__PURE__ */ import_react6.default.createElement(NoteForm, {
+      new_note,
+      add_note,
+      note_input_change
+    }), /* @__PURE__ */ import_react6.default.createElement("button", {
+      onClick: () => set_display_all(!display_all)
+    }, display_all ? "All notes" : "Important notes"), /* @__PURE__ */ import_react6.default.createElement("ul", {
+      className: "note-list"
+    }, display_these.map((note) => /* @__PURE__ */ import_react6.default.createElement(Note, {
+      key: note.id,
+      note,
+      toggle_importance: () => toggle_importance(note.id),
+      remove_note: () => remove_note(note.id)
+    }))));
+  };
+
+  // src/pages/root-page.tsx
+  var Home = () => {
+    const [name, set_name] = (0, import_react7.useState)("");
+    const [username, set_username] = (0, import_react7.useState)("");
+    const [password, set_password] = (0, import_react7.useState)("");
+    const [user, set_user] = (0, import_react7.useState)(null);
+    const [notification, set_notification] = (0, import_react7.useState)("");
+    (0, import_react7.useEffect)(() => {
+      const logged_in_user_JSON = window.localStorage.getItem("logged_in_user");
+      if (logged_in_user_JSON) {
+        const parsed_user = JSON.parse(logged_in_user_JSON);
+        set_user(parsed_user);
+        auth_service.set_token(parsed_user.token);
+      }
+    }, []);
+    const handle_login = async (e) => {
+      e.preventDefault();
+      console.log(`Logging in as ${username}`);
+      console.log(username);
+      console.log(password);
+      try {
+        const logged_in_user = await auth_service.login_response({
+          username,
+          password
+        });
+        window.localStorage.setItem(
+          "logged_in_user",
+          JSON.stringify(logged_in_user)
+        );
+        auth_service.set_token(logged_in_user.token);
+        set_user(logged_in_user);
+        set_username("");
+        set_password("");
+      } catch (error) {
+        console.error(error);
+        set_notification("Invalid credentials");
+        setTimeout(() => {
+          set_notification("");
+        }, 5e3);
+      }
+    };
+    const handle_register = async (e) => {
+      e.preventDefault();
+      console.log(`Registering as ${username}`);
+      console.log(name);
+      console.log(username);
+      console.log(password);
+      try {
+        const registered_user = await auth_service.register_response({
+          name,
+          username,
+          password
+        });
+        console.log(registered_user);
+        set_notification(`Created user: ${registered_user.username}`);
+        set_name("");
+        set_username("");
+        set_password("");
+      } catch (error) {
+        console.error(error);
+        set_notification("Could't register that user");
+        setTimeout(() => {
+          set_notification("");
+        }, 5e3);
+      }
+    };
+    const logout = () => {
+      window.localStorage.removeItem("logged_in_user");
+      set_user(null);
+    };
+    return /* @__PURE__ */ import_react7.default.createElement(import_react7.default.Fragment, null, /* @__PURE__ */ import_react7.default.createElement("h1", null, "Home"), notification !== "" && /* @__PURE__ */ import_react7.default.createElement(import_react7.default.Fragment, null, /* @__PURE__ */ import_react7.default.createElement(Notification, {
+      message: notification
+    })), user === null ? /* @__PURE__ */ import_react7.default.createElement("div", null, /* @__PURE__ */ import_react7.default.createElement(LoginForm, {
       username,
       password,
       handle_login,
       handle_username_input: ({ target }) => set_username(target.value),
       handle_password_input: ({ target }) => set_password(target.value)
-    }) : /* @__PURE__ */ import_react5.default.createElement(import_react5.default.Fragment, null, /* @__PURE__ */ import_react5.default.createElement("p", null, "Logged in as ", user.name)), user !== null && /* @__PURE__ */ import_react5.default.createElement(import_react5.default.Fragment, null, /* @__PURE__ */ import_react5.default.createElement("button", {
+    }), /* @__PURE__ */ import_react7.default.createElement(RegisterForm, {
+      name,
+      username,
+      password,
+      handle_register,
+      handle_name_input: ({ target }) => set_name(target.value),
+      handle_username_input: ({ target }) => set_username(target.value),
+      handle_password_input: ({ target }) => set_password(target.value)
+    })) : /* @__PURE__ */ import_react7.default.createElement(import_react7.default.Fragment, null, /* @__PURE__ */ import_react7.default.createElement(NoteList, null)), user !== null && /* @__PURE__ */ import_react7.default.createElement(import_react7.default.Fragment, null, /* @__PURE__ */ import_react7.default.createElement("p", null, "Logged in as ", user.name), /* @__PURE__ */ import_react7.default.createElement("button", {
       onClick: () => logout()
-    }, "Logout"), /* @__PURE__ */ import_react5.default.createElement(NoteForm, {
-      new_note,
-      add_note,
-      note_input_change
-    })), /* @__PURE__ */ import_react5.default.createElement("button", {
-      onClick: () => set_display_all(!display_all)
-    }, display_all ? "All notes" : "Important notes"), /* @__PURE__ */ import_react5.default.createElement("ul", {
-      className: "note-list"
-    }, display_these.map((note) => /* @__PURE__ */ import_react5.default.createElement(Note, {
-      key: note.id,
-      note,
-      toggle_importance: () => toggle_importance(note.id),
-      remove_note: () => remove_note(note.id)
-    }))), /* @__PURE__ */ import_react5.default.createElement("p", null, "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Alias ipsum dignissimos ipsa. Rerum debitis quidem veniam natus, perspiciatis soluta, ex molestias, commodi dolorem placeat tenetur. Distinctio excepturi necessitatibus iusto facilis?"));
+    }, "Logout")), /* @__PURE__ */ import_react7.default.createElement("p", null, "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Alias ipsum dignissimos ipsa. Rerum debitis quidem veniam natus, perspiciatis soluta, ex molestias, commodi dolorem placeat tenetur. Distinctio excepturi necessitatibus iusto facilis?"));
   };
 
   // src/index.tsx
   import_client.default.createRoot(document.getElementById("root")).render(
-    /* @__PURE__ */ import_react6.default.createElement(import_react6.default.StrictMode, null, /* @__PURE__ */ import_react6.default.createElement(NoteList, null))
+    /* @__PURE__ */ import_react8.default.createElement(import_react8.default.StrictMode, null, /* @__PURE__ */ import_react8.default.createElement(Home, null))
   );
 })();
 /**
