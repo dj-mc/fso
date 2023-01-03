@@ -8,7 +8,7 @@ Parts 0, 1, and 2 focused on the frontend, which I keep [here](https://github.co
 This repo (currently) contains the exercises I completed from parts 3 and 4.
 Part 5 is (mostly) frontend material, which further builds on previous parts.
 
-## Authorization with jwt tokens
+## Authentication with jwt tokens
 
 Crashed the server: TokenExpiredError: jwt expired
 
@@ -79,12 +79,10 @@ await Note.insertMany(init_notes_data);
 
 ## Other things
 
-`heroku login`  
-`heroku config:set MONGODB_URI=<uri>`  
-`git push heroku HEAD:master`
-
 `dotenv` is installed as a normal dependency because heroku was not installing
 dev deps last I tried. I would like to remove this package if possible.
 
 FullStackOpen wants me to install `cross-env` and `express-async-errors`, but
 this project omits their usage due to a lack of maintenance/interest.
+
+Live demo: https://djmc-fso.fly.dev/
